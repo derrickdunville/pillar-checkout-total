@@ -21,6 +21,7 @@ public class Store {
 	}
 	
 	public AbstractItem<?> getItem(String itemName) {
+//		TODO: Item may not be in storeItems. Should throw ItemNotFoundException
 		return this.storeItems.get(itemName);
 	}
 	
