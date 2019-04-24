@@ -17,11 +17,11 @@ public class ItemTest {
 	@Before
 	public void initializeTest() {
 		quantifiedItem = new QuantifiedItem("QuantifiedItem", 2.59);
-		weightedItem = new WeightedItem("Test", 2.59);
+		weightedItem = new WeightedItem("WeightedItem", 2.59);
 	}
 	@Test
 	public void quantifiedItemCreatedWithNameAndPrice() {
-		assertEquals(quantifiedItem.getName(), "Test");
+		assertEquals(quantifiedItem.getName(), "QuantifiedItem");
 		assertEquals(quantifiedItem.getPrice(), 2.59, delta);	
 	}
 	
@@ -32,7 +32,7 @@ public class ItemTest {
 	
 	@Test
 	public void weightedItemCreatedWithNameAndPrice() {
-		assertEquals(weightedItem.getName(), "Test");
+		assertEquals(weightedItem.getName(), "WeightedItem");
 		assertEquals(weightedItem.getPrice(), 2.59, delta);	
 	}
 	
