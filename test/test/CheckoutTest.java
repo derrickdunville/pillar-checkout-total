@@ -17,6 +17,7 @@ public class CheckoutTest {
 	QuantifiedItem quantifiedItemOne;
 	QuantifiedItem quantifiedItemTwo;
 	WeightedItem weightedItemOne;
+	WeightedItem weightedItemTwo;
 	Checkout checkout;
 	
 	@Before
@@ -25,9 +26,11 @@ public class CheckoutTest {
 		quantifiedItemOne = new QuantifiedItem("QuantifiedItemOne", 2.59);
 		quantifiedItemTwo = new QuantifiedItem("QuantifiedItemTwo", 1.59);
 		weightedItemOne = new WeightedItem("WeightedItemOne", 1.49);
+		weightedItemTwo = new WeightedItem("WeightedItemTwo", 1.79);
 		store.addItem(quantifiedItemOne);
 		store.addItem(quantifiedItemTwo);
 		store.addItem(weightedItemOne);
+		store.addItem(weightedItemTwo);
 		checkout = new Checkout(store);
 	}
 	
@@ -51,5 +54,11 @@ public class CheckoutTest {
 	@Test
 	public void canScanAWeightedItem() {
 		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.0), weightedItemOne.getPrice() * 1.0, delta);
+	}
+	
+	@Test
+	public void canScanTwoDifferentWeightedItems() {
+		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5, delta);
+		assertEquals(checkout.scanItem(weightedItemTwo.getName(), 1.5), weightedItemOne.getPrice() * 1.5 + weightedItemTwo.getPrice() * 1.5, delta);
 	}
 }
