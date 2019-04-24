@@ -81,4 +81,18 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice(), delta);
 		assertEquals(checkout.scanItem(weightedItemTwo.getName(), 2.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice() + weightedItemTwo.getPrice() * 2.5, delta);
 	}
+	
+	@Test
+	public void canScanAQuantifiedItemWithAMarkdown() {
+		double priceBeforeMarkdown = quantifiedItemOne.getPrice();
+		quantifiedItemOne.setMarkdown(0.29);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
+	}
+	
+	@Test
+	public void canScanAWeightedItemWithAMarkdown() {
+		double priceBeforeMarkdown = weightedItemOne.getPrice();
+		weightedItemOne.setMarkdown(0.39);
+		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), (priceBeforeMarkdown - 0.39)*1.5, 0.01);
+	}
 }

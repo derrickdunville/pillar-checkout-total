@@ -19,6 +19,7 @@ public class ItemTest {
 		quantifiedItem = new QuantifiedItem("QuantifiedItem", 2.59);
 		weightedItem = new WeightedItem("WeightedItem", 2.59);
 	}
+	
 	@Test
 	public void quantifiedItemCreatedWithNameAndPrice() {
 		assertEquals(quantifiedItem.getName(), "QuantifiedItem");
@@ -39,5 +40,16 @@ public class ItemTest {
 	@Test
 	public void weightedItemSubTotalBasedOnWeight() {
 		assertEquals(weightedItem.getSubTotal(2.00), 2.59*2.00, delta);
+	}
+	
+	@Test
+	public void markdownAnItem() {
+		double priceBeforeMarkdown = quantifiedItem.getPrice();
+		quantifiedItem.setMarkdown(0.29);
+		assertEquals(quantifiedItem.getPrice(), priceBeforeMarkdown - 0.29, delta);
+		
+		priceBeforeMarkdown = weightedItem.getPrice();
+		weightedItem.setMarkdown(0.39);
+		assertEquals(weightedItem.getPrice(), priceBeforeMarkdown - 0.39, delta);
 	}
 }
