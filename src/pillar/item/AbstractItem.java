@@ -1,10 +1,10 @@
-package pillar;
+package pillar.item;
 
-public class Item {
+public abstract class AbstractItem<V> {
 	private String name;
 	private double price;
 	
-	public Item(String itemName, double itemPrice) {
+	public AbstractItem(String itemName, double itemPrice) {
 		this.name = itemName;
 		this.price = itemPrice;
 	}
@@ -16,4 +16,6 @@ public class Item {
 	public double getPrice() {
 		return this.price;
 	}
+	
+	public abstract double getSubTotal(V unit);
 }
