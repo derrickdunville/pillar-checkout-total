@@ -73,4 +73,12 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
 		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
 	}
+	
+	@Test
+	public void canScanMultipleWeightedItemsAndQuatifiedItems() {
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
+		assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice(), delta);
+		assertEquals(checkout.scanItem(weightedItemTwo.getName(), 2.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice() + weightedItemTwo.getPrice() * 2.5, delta);
+	}
 }
