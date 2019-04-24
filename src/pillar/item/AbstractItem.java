@@ -17,5 +17,5 @@ public abstract class AbstractItem<V> {
 		return this.price;
 	}
 	
-	public abstract double getSubTotal(V unit);
+	public abstract double getSubTotal(V units);
 }
