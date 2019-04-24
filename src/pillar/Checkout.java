@@ -17,7 +17,11 @@ public class Checkout {
 	}
 	
 	public double scanItem(String itemName) {
-		scannedItems.put(itemName, 1);
+		if(scannedItems.get(itemName) != null) {
+			scannedItems.put(itemName, scannedItems.get(itemName) + 1);
+		} else {
+			scannedItems.put(itemName, 1);
+		}
 		return this.getTotal();
 	}
 	

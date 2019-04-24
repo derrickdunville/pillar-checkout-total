@@ -36,4 +36,10 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), 2);
 		assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + quantifiedItemTwo.getPrice(), 2);
 	}
+	
+	@Test
+	public void canScanAQuantifiedItemMultipleTimes() {
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), 2);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*2, 2);
+	}
 }
