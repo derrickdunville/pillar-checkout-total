@@ -30,7 +30,7 @@ public class ItemTest {
 	}
 	
 	@Test
-	public void WeighterItemSubTotalBasedOnWeight() {
+	public void WeightedItemSubTotalBasedOnWeight() {
 		WeightedItem testItem = new WeightedItem("Test", 2.59);
 		assertEquals(testItem.getSubTotal(2.00), 2.59*2.00, 2);
 	}

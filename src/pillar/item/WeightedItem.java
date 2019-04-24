@@ -10,5 +10,4 @@ public class WeightedItem extends AbstractItem<Double> {
 	public double getSubTotal(Double weight) {
 		return this.getPrice() * weight;
 	}
-
 }
