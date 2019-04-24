@@ -16,4 +16,12 @@ public class Store {
 		return this.storeItems;
 	}
 	
+	public void addItem(AbstractItem item) {
+		this.storeItems.put(item.getName(), item);
+	}
+	
+	public AbstractItem getItem(String itemName) {
+		return this.storeItems.get(itemName);
+	}
+	
 }

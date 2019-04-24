@@ -10,27 +10,27 @@ import pillar.item.WeightedItem;
 public class ItemTest {
 
 	@Test
-	public void QuantifiedItemCreatedWithNameAndPrice() {
+	public void quantifiedItemCreatedWithNameAndPrice() {
 		QuantifiedItem testItem = new QuantifiedItem("Test", 2.59);
 		assertEquals(testItem.getName(), "Test");
 		assertEquals(testItem.getPrice(), 2.59, 2);	
 	}
 	
 	@Test
-	public void QuantifiedItemSubTotalBasedOnQuantity() {
+	public void quantifiedItemSubTotalBasedOnQuantity() {
 		QuantifiedItem testItem = new QuantifiedItem("Test", 2.59);
 		assertEquals(testItem.getSubTotal(2), 2.59*2, 2);
 	}
 	
 	@Test
-	public void WeightedItemCreatedWithNameAndPrice() {
+	public void weightedItemCreatedWithNameAndPrice() {
 		WeightedItem testItem = new WeightedItem("Test", 2.59);
 		assertEquals(testItem.getName(), "Test");
 		assertEquals(testItem.getPrice(), 2.59, 2);	
 	}
 	
 	@Test
-	public void WeightedItemSubTotalBasedOnWeight() {
+	public void weightedItemSubTotalBasedOnWeight() {
 		WeightedItem testItem = new WeightedItem("Test", 2.59);
 		assertEquals(testItem.getSubTotal(2.00), 2.59*2.00, 2);
 	}
