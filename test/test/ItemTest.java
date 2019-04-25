@@ -52,4 +52,12 @@ public class ItemTest {
 		weightedItem.setMarkdown(0.39);
 		assertEquals(weightedItem.getPrice(), priceBeforeMarkdown - 0.39, delta);
 	}
+	
+	@Test
+	public void addBuyNGetMAtPercentOffSpecialToQuantifiedItem() {
+		quantifiedItem.setSpecial(1, 1, 100.00);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 1);
+		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 1);
+		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
+	}
 }

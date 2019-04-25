@@ -22,6 +22,6 @@ public abstract class AbstractItem<V> {
 	public void setMarkdown(double markdownAmount) {
 		this.markdown = markdownAmount;
 	}
-	
+		
 	public abstract double getSubTotal(V units);
 }

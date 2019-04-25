@@ -93,6 +93,6 @@ public class CheckoutTest {
 	public void canScanAWeightedItemWithAMarkdown() {
 		double priceBeforeMarkdown = weightedItemOne.getPrice();
 		weightedItemOne.setMarkdown(0.39);
-		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), (priceBeforeMarkdown - 0.39)*1.5, 0.01);
+		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), (priceBeforeMarkdown - 0.39)*1.5, delta);
 	}
 }
