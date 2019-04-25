@@ -60,4 +60,11 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 1);
 		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
 	}
+	
+	@Test
+	public void addBuyNForXPrice() {
+		quantifiedItem.setSpecial(3, 5.00);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 3);
+		assertEquals(quantifiedItem.getDiscountPrice(), 5.00, delta);
+	}
 }

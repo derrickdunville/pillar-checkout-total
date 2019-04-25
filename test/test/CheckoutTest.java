@@ -146,4 +146,33 @@ public class CheckoutTest {
 		// Scanning a 4th should trigger the special
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
 	}
+	
+	@Test
+	public void canScanThreeWithThreeForFiveSpecial() {
+		quantifiedItemOne.setSpecial(3, 5.00);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
+	}
+	
+	@Test
+	public void canScanFiveWithThreeForFiveSpecial() {
+		quantifiedItemOne.setSpecial(3, 5.00);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
+	}
+	
+	@Test
+	public void canScanSixWithThreeForFiveSpecial() {
+		quantifiedItemOne.setSpecial(3, 5.00);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 10.00, delta);
+	}
 }
