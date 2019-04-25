@@ -8,37 +8,38 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 	
 	public QuantifiedItem(String itemName, double itemPrice) {
 		super(itemName, itemPrice);
-		this.specialTriggerQuantity = 0;
-		this.specialDiscountedQuantity = 0;
-		this.specialDiscountPercent = 0.0;
+		specialTriggerQuantity = 0;
+		specialDiscountedQuantity = 0;
+		specialDiscountPercent = 0.0;
 	}
 	
 	public void setSpecial(int triggerQuantity, int discountedQuantity, double discountPercent) {
-		this.specialTriggerQuantity = triggerQuantity;
-		this.specialDiscountedQuantity = discountedQuantity;
-		this.specialDiscountPercent = discountPercent;				
+		specialTriggerQuantity = triggerQuantity;
+		specialDiscountedQuantity = discountedQuantity;
+		specialDiscountPercent = discountPercent;				
 	}
 	
 	public int getSpecialTriggerQuantity() {
-		return this.specialTriggerQuantity;
+		return specialTriggerQuantity;
 	}
 	
 	public int getSpecialDiscountedQuantity() {
-		return this.specialDiscountedQuantity;
+		return specialDiscountedQuantity;
 	}
 	
 	public double getSpecialDiscountPercent() {
-		return this.specialDiscountPercent;
+		return specialDiscountPercent;
 	}
 
 	public double getSubTotal(Integer quantity) {
+		// price * # of trigger quantities * trigger quantity + price * discount quantities * (1 - discount percent/100) + price * remaining quantity
 		
 		double subTotal = 0.0;
 		
 		if(specialTriggerQuantity > 0) {
 			int timesSpecialCanBeApplied = (int) Math.floor(quantity/(specialTriggerQuantity + specialDiscountedQuantity));
 			int remainingQuantity = quantity % (specialTriggerQuantity + specialDiscountedQuantity);
-			subTotal = timesSpecialCanBeApplied*(this.getPrice()*this.specialTriggerQuantity + this.getPrice()*specialDiscountedQuantity*(1-specialDiscountPercent/100)) + this.getPrice()*remainingQuantity; 
+			subTotal = this.getPrice()*(timesSpecialCanBeApplied*(specialTriggerQuantity + specialDiscountedQuantity*(1-specialDiscountPercent/100)) + remainingQuantity); 
 		} else {
 			subTotal = this.getPrice() * quantity;
 		}

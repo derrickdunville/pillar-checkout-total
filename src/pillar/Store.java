@@ -9,20 +9,20 @@ public class Store {
 	private HashMap<String, AbstractItem<?>> storeItems;
 	
 	public Store() {
-		this.storeItems = new HashMap<String, AbstractItem<?>>();
+		storeItems = new HashMap<String, AbstractItem<?>>();
 	}
 	
 	public HashMap<String, AbstractItem<?>> getStoreItems(){
-		return this.storeItems;
+		return storeItems;
 	}
 	
 	public void addItem(AbstractItem<?> item) {
-		this.storeItems.put(item.getName(), item);
+		storeItems.put(item.getName(), item);
 	}
 	
 	public AbstractItem<?> getItem(String itemName) {
 //		TODO: Item may not be in storeItems. Should throw ItemNotFoundException
-		return this.storeItems.get(itemName);
+		return storeItems.get(itemName);
 	}
 	
 }

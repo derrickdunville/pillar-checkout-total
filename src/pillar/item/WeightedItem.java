@@ -8,6 +8,6 @@ public class WeightedItem extends AbstractItem<Double> {
 
 	@Override
 	public double getSubTotal(Double weight) {
-		return this.getPrice() * weight;
+		return getPrice() * weight;
 	}
 }

@@ -14,7 +14,7 @@ public class Checkout {
 	
 	public Checkout(Store store) {
 		this.store = store;
-		this.scannedItems = new HashMap<String, Object>();
+		scannedItems = new HashMap<String, Object>();
 	}
 	
 	public double scanItem(String itemName) {
@@ -32,12 +32,12 @@ public class Checkout {
 		} else {
 			scannedItems.put(itemName, weight);
 		}
-		return this.getTotal();
+		return getTotal();
 	}
 	
 	private double getTotal() {
 		double total = 0.0;
-		for(Map.Entry<String, Object> entry: this.scannedItems.entrySet()) {
+		for(Map.Entry<String, Object> entry: scannedItems.entrySet()) {
 			AbstractItem<?> currentItem = store.getItem(entry.getKey());
 			if(currentItem instanceof QuantifiedItem) {
 				total += ((QuantifiedItem) currentItem).getSubTotal((Integer) entry.getValue());
