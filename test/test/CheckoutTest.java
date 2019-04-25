@@ -105,4 +105,18 @@ public class CheckoutTest {
 		// Scan a 3rd item and should be total of 2, since buy 2 get 1 free special is set
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
 	}
+		
+	@Test
+	public void canScanSixWithBuyTwoGetOneFreeSpecial() {
+		quantifiedItemOne.setSpecial(2, 1, 100.00);
+		// Scan 2 items
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		// Scan a 3rd item and should be total of 2, since buy 2 get 1 free special is set
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 4, delta);
+		// Scan a 6th item and should get 2 for free
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 4, delta);
+	}
 }
