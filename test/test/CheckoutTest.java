@@ -96,6 +96,14 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), (priceBeforeMarkdown - 0.39)*1.5, delta);
 	}
 	
+	@Test 
+	public void scanTwoWithBuyOneGetOneFreeSpecial() {
+		quantifiedItemOne.setSpecial(1, 1, 100.00);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		// 2nd Item should be free
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+	}
+	
 	@Test
 	public void canScanThreeWithBuyTwoGetOneFreeSpecial() {
 		quantifiedItemOne.setSpecial(2, 1, 100.00);
@@ -126,5 +134,16 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
 		// 2nd item should be half price
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 1.5, delta);
+	}
+	
+	@Test
+	public void canScanFourWithBuyTwoGetTwoHalfOffSpecial() {
+		// essentially the same as buy 3 get one free
+		quantifiedItemOne.setSpecial(2, 2, 50.00);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
+		// Scanning a 4th should trigger the special
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
 	}
 }
