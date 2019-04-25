@@ -95,4 +95,14 @@ public class CheckoutTest {
 		weightedItemOne.setMarkdown(0.39);
 		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), (priceBeforeMarkdown - 0.39)*1.5, delta);
 	}
+	
+	@Test
+	public void canScanThreeWithBuyTwoGetOneFreeSpecial() {
+		quantifiedItemOne.setSpecial(2, 1, 100.00);
+		// Scan 2 items
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		// Scan a 3rd item and should be total of 2, since buy 2 get 1 free special is set
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+	}
 }

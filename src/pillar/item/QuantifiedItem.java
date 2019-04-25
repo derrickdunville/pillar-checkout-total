@@ -32,6 +32,17 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 	}
 
 	public double getSubTotal(Integer quantity) {
-		return this.getPrice() * quantity;
+		
+		double subTotal = 0.0;
+		
+		if(specialTriggerQuantity > 0) {
+			int timesSpecialCanBeApplied = (int) Math.floor(quantity/(specialTriggerQuantity + specialDiscountedQuantity));
+			int remainingQuantity = quantity % (specialTriggerQuantity + specialDiscountedQuantity);
+			subTotal = timesSpecialCanBeApplied*(this.getPrice()*this.specialTriggerQuantity + this.getPrice()*specialDiscountedQuantity*(1-specialDiscountPercent/100)) + this.getPrice()*remainingQuantity; 
+		} else {
+			subTotal = this.getPrice() * quantity;
+		}
+		
+		return subTotal;
 	}
 }
