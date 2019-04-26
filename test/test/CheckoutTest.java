@@ -218,5 +218,11 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5, delta);
 		assertEquals(checkout.scanItem(weightedItemOne.getName(), 2.0), weightedItemOne.getPrice() * (1.5 + 2.0) , delta);
 		assertEquals(checkout.removeItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 2.0, delta);
-	}	
+	}
+	
+	@Test
+	public void canScanThreePoundsWithBuyTwoPoundsGetOnePoundFreeSpecial() {
+		weightedItemOne.setSpecial(2.0, 1.0, 100.0);
+		assertEquals(checkout.scanItem(weightedItemOne.getName(), 3.0), weightedItemOne.getPrice() * 2.0, delta);
+	}
 }
