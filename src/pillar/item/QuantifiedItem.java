@@ -61,10 +61,10 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 			int timesSpecialCanBeApplied = (int) Math.floor(quantity/(specialTriggerQuantity + specialDiscountedQuantity));
 			int remainingQuantity = quantity % (specialTriggerQuantity + specialDiscountedQuantity);
 			if(quantity <= specialQuanitityLimit) {
-				subTotal = this.getPrice()*(timesSpecialCanBeApplied*(specialTriggerQuantity + specialDiscountedQuantity*(1-specialDiscountPercent/100)) + remainingQuantity);	
+				subTotal = getPrice()*(timesSpecialCanBeApplied*(specialTriggerQuantity + specialDiscountedQuantity*(1-specialDiscountPercent/100)) + remainingQuantity);	
 			} else {
 				int restrictedRemainingQuantity = timesSpecialCanBeApplied*(specialDiscountedQuantity + specialTriggerQuantity) + remainingQuantity - specialQuanitityLimit;
-				subTotal = this.getPrice()*(Math.floor(specialQuanitityLimit/(specialTriggerQuantity + specialDiscountedQuantity))*(specialTriggerQuantity + specialDiscountedQuantity*(1-specialDiscountPercent/100)) + restrictedRemainingQuantity);	
+				subTotal = getPrice()*(Math.floor(specialQuanitityLimit/(specialTriggerQuantity + specialDiscountedQuantity))*(specialTriggerQuantity + specialDiscountedQuantity*(1-specialDiscountPercent/100)) + restrictedRemainingQuantity);	
 			}
 			
 		// Special is set to form N for $X 
@@ -74,11 +74,8 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 			if(quantity <= specialQuanitityLimit) {
 				subTotal = timesSpecialCanBeApplied*specialDiscountPrice + getPrice()*remainingQuantity;
 			} else {
-				System.out.println("Should get here: " + quantity);
 				int restrictedRemainingQuantity = timesSpecialCanBeApplied*specialTriggerQuantity + remainingQuantity - specialQuanitityLimit;
-				System.out.println("restricted quantity: " + restrictedRemainingQuantity);
 				subTotal = Math.floor(specialQuanitityLimit/specialTriggerQuantity)*specialDiscountPrice + getPrice()*restrictedRemainingQuantity;
-				System.out.println("Sub Total: "+ subTotal);
 			}
 			
 			
