@@ -71,7 +71,16 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		} else if (specialTriggerQuantity > 0 && specialDiscountPrice > 0) {
 			int timesSpecialCanBeApplied = (int) Math.floor(quantity/specialTriggerQuantity);
 			int remainingQuantity = quantity % (specialTriggerQuantity);
-			subTotal = timesSpecialCanBeApplied*specialDiscountPrice + this.getPrice()*remainingQuantity;
+			if(quantity <= specialQuanitityLimit) {
+				subTotal = timesSpecialCanBeApplied*specialDiscountPrice + getPrice()*remainingQuantity;
+			} else {
+				System.out.println("Should get here: " + quantity);
+				int restrictedRemainingQuantity = timesSpecialCanBeApplied*specialTriggerQuantity + remainingQuantity - specialQuanitityLimit;
+				System.out.println("restricted quantity: " + restrictedRemainingQuantity);
+				subTotal = Math.floor(specialQuanitityLimit/specialTriggerQuantity)*specialDiscountPrice + getPrice()*restrictedRemainingQuantity;
+				System.out.println("Sub Total: "+ subTotal);
+			}
+			
 			
 		// No Special set
 		} else {

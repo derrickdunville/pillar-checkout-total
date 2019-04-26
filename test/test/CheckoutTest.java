@@ -187,4 +187,16 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*6, delta);
 	}
 	
+	@Test
+	public void canScanNineWithThreeForFiveSpecialLimitSix() {
+		quantifiedItemOne.setSpecial(3, 5.00);
+		quantifiedItemOne.setSpecialLimit(6);
+		for(int i = 0; i < 8; ++i) {
+			checkout.scanItem(quantifiedItemOne.getName());
+		}
+		// 3rd set of 3 should be full price
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*3 + 10.00, delta);
+	}
+	
+	
 }
