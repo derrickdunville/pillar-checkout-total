@@ -225,4 +225,14 @@ public class CheckoutTest {
 		weightedItemOne.setSpecial(2.0, 1.0, 100.0);
 		assertEquals(checkout.scanItem(weightedItemOne.getName(), 3.0), weightedItemOne.getPrice() * 2.0, delta);
 	}
+	
+	@Test
+	public void canScanTwoWithBuyOneGetOneFreeSpecialAndMarkdown() {
+		double priceBeforeMarkdown = quantifiedItemOne.getPrice();
+		quantifiedItemOne.setSpecial(1, 1, 100.0);
+		quantifiedItemOne.setMarkdown(0.29);
+		checkout.scanItem(quantifiedItemOne.getName());
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
+		
+	}
 }
