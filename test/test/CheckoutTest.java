@@ -204,4 +204,14 @@ public class CheckoutTest {
 		assertEquals(checkout.removeItem(quantifiedItemOne.getName()), 0, delta);		
 	}
 	
+	
+	@Test
+	public void canRemoveQuantifiedItemThatHasABuy2Get1FreeSpecial() {
+		quantifiedItemOne.setSpecial(2, 1, 100.00);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2 , delta);
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		assertEquals(checkout.removeItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);		
+	}
+	
 }
