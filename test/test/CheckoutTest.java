@@ -198,5 +198,10 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*3 + 10.00, delta);
 	}
 	
+	@Test
+	public void canRemoveAScannedQuantifiedItem() {
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		assertEquals(checkout.removeItem(quantifiedItemOne.getName()), 0, delta);		
+	}
 	
 }

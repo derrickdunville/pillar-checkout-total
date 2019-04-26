@@ -35,6 +35,19 @@ public class Checkout {
 		return getTotal();
 	}
 	
+	public double removeItem(String itemName) {
+		if(scannedItems.get(itemName) != null) {
+			if((Integer) scannedItems.get(itemName) > 1) {
+				scannedItems.put(itemName, (Integer) scannedItems.get(itemName) - 1);
+			} else {
+				scannedItems.remove(itemName);
+			}
+		} else {
+			// Item not found, cannot remove an item that is not within scanned items
+		}
+		return getTotal();
+	}
+	
 	private double getTotal() {
 		double total = 0.0;
 		for(Map.Entry<String, Object> entry: scannedItems.entrySet()) {
