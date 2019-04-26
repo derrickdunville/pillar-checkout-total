@@ -67,4 +67,11 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 3);
 		assertEquals(quantifiedItem.getDiscountPrice(), 5.00, delta);
 	}
+	
+	@Test
+	public void addSpecialLimit() {
+		quantifiedItem.setSpecial(2,  1, 100.00);
+		quantifiedItem.setSpecialLimit(6);
+		assertEquals(quantifiedItem.getSpecialLimit(), 6);
+	}
 }

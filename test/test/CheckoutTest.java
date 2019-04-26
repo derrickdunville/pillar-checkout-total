@@ -175,4 +175,16 @@ public class CheckoutTest {
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 10.00, delta);
 	}
+	
+	@Test
+	public void canScanEightWithBuyTwoGetOneFreeSpecialLimitSix() {
+		quantifiedItemOne.setSpecial(2, 1, 100.00);
+		quantifiedItemOne.setSpecialLimit(6);
+		for(int i = 0; i < 7; ++i) {
+			checkout.scanItem(quantifiedItemOne.getName());
+		}
+		// 8th item should not be discounted since limit is 6
+		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*6, delta);
+	}
+	
 }
