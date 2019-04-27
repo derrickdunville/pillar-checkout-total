@@ -16,8 +16,10 @@ public class CheckoutTest {
 	Store store;
 	QuantifiedItem quantifiedItemOne;
 	QuantifiedItem quantifiedItemTwo;
+	QuantifiedItem quantifiedItemNotInStore;
 	WeightedItem weightedItemOne;
 	WeightedItem weightedItemTwo;
+	WeightedItem weightedItemNotInStore;
 	Checkout checkout;
 	
 	@Before
@@ -25,8 +27,10 @@ public class CheckoutTest {
 		store = new Store();
 		quantifiedItemOne = new QuantifiedItem("QuantifiedItemOne", 2.59);
 		quantifiedItemTwo = new QuantifiedItem("QuantifiedItemTwo", 1.59);
+		quantifiedItemNotInStore = new QuantifiedItem("NotInStore", 1.29);
 		weightedItemOne = new WeightedItem("WeightedItemOne", 1.49);
 		weightedItemTwo = new WeightedItem("WeightedItemTwo", 1.79);
+		weightedItemNotInStore = new WeightedItem("WeightedNotInStore", 1.29);
 		store.addItem(quantifiedItemOne);
 		store.addItem(quantifiedItemTwo);
 		store.addItem(weightedItemOne);
@@ -233,6 +237,27 @@ public class CheckoutTest {
 		quantifiedItemOne.setMarkdown(0.29);
 		checkout.scanItem(quantifiedItemOne.getName());
 		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
-		
+	}
+	
+	@Test
+	public void cantScanAQuantifiedItemThatIsNotAValidStoreItem() {
+		assertEquals(checkout.scanItem(quantifiedItemNotInStore.getName()), 0.0, delta);
+	}
+	
+	@Test
+	public void cantScanAWeightedItemThatIsNotAValidStoreItem() {
+		assertEquals(checkout.scanItem(weightedItemNotInStore.getName(), 2.00), 0.0, delta);
+	}
+	
+	@Test
+	public void cantRemoveAQuantifiedItemHasNotBeenScanned() {
+		checkout.scanItem(quantifiedItemOne.getName());
+		assertEquals(checkout.removeItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice(), delta);
+	}
+	
+	@Test
+	public void cantRemoveAWeightedItemHasNotBeenScanned() {
+		checkout.scanItem(weightedItemOne.getName(), 1.5);
+		assertEquals(checkout.removeItem(weightedItemTwo.getName(), 2.0), weightedItemOne.getPrice() * 1.5, delta);
 	}
 }

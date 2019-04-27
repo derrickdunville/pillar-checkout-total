@@ -18,20 +18,25 @@ public class Checkout {
 	}
 	
 	public double scanItem(String itemName) {
-		if(scannedItems.get(itemName) != null) {
-			scannedItems.put(itemName, (Integer) scannedItems.get(itemName) + 1);
-		} else {
-			scannedItems.put(itemName, 1);
+		if(store.getItem(itemName) != null) {
+			if(scannedItems.get(itemName) != null) {
+				scannedItems.put(itemName, (Integer) scannedItems.get(itemName) + 1);
+			} else {
+				scannedItems.put(itemName, 1);
+			}
 		}
-		return this.getTotal();
+		return getTotal();
+		
 	}
-	
+
 	public double scanItem(String itemName, double weight) {
-		if(scannedItems.get(itemName) != null) {
-			scannedItems.put(itemName, (Double) scannedItems.get(itemName) + weight);
-		} else {
-			scannedItems.put(itemName, weight);
-		}
+		if(store.getItem(itemName) != null) {
+			if(scannedItems.get(itemName) != null) {
+				scannedItems.put(itemName, (Double) scannedItems.get(itemName) + weight);
+			} else {
+				scannedItems.put(itemName, weight);
+			}
+		} 
 		return getTotal();
 	}
 	
@@ -42,8 +47,6 @@ public class Checkout {
 			} else {
 				scannedItems.remove(itemName);
 			}
-		} else {
-			// Item not found, cannot remove an item that is not within scanned items
 		}
 		return getTotal();
 	}
@@ -55,8 +58,6 @@ public class Checkout {
 			} else {
 				scannedItems.remove(itemName);
 			}
-		} else {
-			// Item not found, cannot remove an item that is not within scanned items
 		}
 		return getTotal();
 	}
