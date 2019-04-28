@@ -170,4 +170,21 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialLimit(), 0);
 	}
 	
+	@Test
+	public void itemNameCannotBeNull() {
+		try {
+			QuantifiedItem quantifiedItem = new QuantifiedItem(null, 0.00);
+		} catch (IllegalArgumentException ex) {
+			assertEquals(ex.getMessage(), "Item name cannot be null or empty String");
+		}
+	}
+	
+	@Test
+	public void itemNameCannotBeEmptyString() {
+		try {
+			QuantifiedItem quantifiedItem = new QuantifiedItem("", 0.00);
+		} catch (IllegalArgumentException ex) {
+			assertEquals(ex.getMessage(), "Item name cannot be null or empty String");
+		}
+	}
 }
