@@ -81,4 +81,14 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
 		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
 	}
+	
+	@Test
+	public void settingSpecialNForXShouldClearBuyNGetNXPercentOff() {
+		quantifiedItem.setSpecial(2, 1, 100.00);
+		quantifiedItem.setSpecial(3, 5.00);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 3);
+		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		assertEquals(quantifiedItem.getDiscountPrice(), 5.00, delta);
+	}
 }

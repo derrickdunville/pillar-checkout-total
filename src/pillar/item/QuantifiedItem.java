@@ -26,6 +26,8 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		if(triggerQuantity*getPrice() > discountPrice) {
 			specialTriggerQuantity = triggerQuantity;
 			specialDiscountPrice = discountPrice;
+			specialDiscountedQuantity = 0;
+			specialDiscountPercent = 0.0;
 		}
 	}
 	
