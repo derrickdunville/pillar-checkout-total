@@ -19,7 +19,8 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 	public void setSpecial(int triggerQuantity, int discountedQuantity, double discountPercent) {
 		specialTriggerQuantity = triggerQuantity;
 		specialDiscountedQuantity = discountedQuantity;
-		specialDiscountPercent = discountPercent;				
+		specialDiscountPercent = discountPercent;
+		specialDiscountPrice = 0.0;
 	}
 	
 	public void setSpecial(int triggerQuantity, double discountPrice) {
