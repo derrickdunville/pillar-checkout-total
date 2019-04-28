@@ -13,7 +13,7 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		specialTriggerQuantity = 0;
 		specialDiscountedQuantity = 0;
 		specialDiscountPercent = 0.0;
-		specialQuanitityLimit = Integer.MAX_VALUE;
+		specialQuanitityLimit = 0;
 	}
 	
 	public void setSpecial(int triggerQuantity, int discountedQuantity, double discountPercent) {
@@ -70,7 +70,7 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		if(specialTriggerQuantity > 0 && specialDiscountedQuantity > 0) {
 			int timesSpecialCanBeApplied = (int) Math.floor(quantity/(specialTriggerQuantity + specialDiscountedQuantity));
 			int remainingQuantity = quantity % (specialTriggerQuantity + specialDiscountedQuantity);
-			if(quantity <= specialQuanitityLimit) {
+			if(quantity <= specialQuanitityLimit || specialQuanitityLimit == 0) {
 				subTotal = getPrice()*(timesSpecialCanBeApplied*(specialTriggerQuantity + specialDiscountedQuantity*(1-specialDiscountPercent/100)) + remainingQuantity);	
 			} else {
 				int restrictedRemainingQuantity = timesSpecialCanBeApplied*(specialDiscountedQuantity + specialTriggerQuantity) + remainingQuantity - specialQuanitityLimit;
@@ -81,7 +81,7 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		} else if (specialTriggerQuantity > 0 && specialDiscountPrice > 0) {
 			int timesSpecialCanBeApplied = (int) Math.floor(quantity/specialTriggerQuantity);
 			int remainingQuantity = quantity % (specialTriggerQuantity);
-			if(quantity <= specialQuanitityLimit) {
+			if(quantity <= specialQuanitityLimit || specialQuanitityLimit == 0) {
 				subTotal = timesSpecialCanBeApplied*specialDiscountPrice + getPrice()*remainingQuantity;
 			} else {
 				int restrictedRemainingQuantity = timesSpecialCanBeApplied*specialTriggerQuantity + remainingQuantity - specialQuanitityLimit;
