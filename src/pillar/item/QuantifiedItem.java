@@ -42,7 +42,9 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 	}
 	
 	public void setSpecialLimit(int limit) {
-		specialQuanitityLimit = limit;
+		if(limit >= 0) {
+			specialQuanitityLimit = limit;
+		}
 	}
 	
 	public int getSpecialTriggerQuantity() {

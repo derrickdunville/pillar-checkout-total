@@ -164,4 +164,10 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
 	}
 	
+	@Test
+	public void specialLimitMustBeGreaterThanEqualZero() {
+		quantifiedItem.setSpecialLimit(-1);
+		assertEquals(quantifiedItem.getSpecialLimit(), 0);
+	}
+	
 }
