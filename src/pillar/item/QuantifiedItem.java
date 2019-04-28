@@ -29,14 +29,16 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		if(triggerQuantity == 0 && discountPrice == 0.00) {
 			specialTriggerQuantity = 0;
 			specialDiscountPrice = 0.0;
-		} else {
-			if(triggerQuantity*getPrice() > discountPrice) {
-				specialTriggerQuantity = triggerQuantity;
-				specialDiscountPrice = discountPrice;
-				specialDiscountedQuantity = 0;
-				specialDiscountPercent = 0.0;
-			}
+			return;
 		}
+		
+		if(discountPrice >= 0 && triggerQuantity*getPrice() > discountPrice) {
+			specialTriggerQuantity = triggerQuantity;
+			specialDiscountPrice = discountPrice;
+			specialDiscountedQuantity = 0;
+			specialDiscountPercent = 0.0;
+		}
+		
 	}
 	
 	public void setSpecialLimit(int limit) {
