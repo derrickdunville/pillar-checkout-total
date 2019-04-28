@@ -152,4 +152,16 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
 		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
 	}
+	
+	@Test
+	public void BuyNForXMustHaveBothTriggerQuantityAndDiscountPriceGreaterThanZeorWhenSettingSpeical() {
+		quantifiedItem.setSpecial(2, 0);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
+		
+		quantifiedItem.setSpecial(0, 2.00);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
+	}
+	
 }

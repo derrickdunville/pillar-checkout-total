@@ -32,7 +32,7 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 			return;
 		}
 		
-		if(discountPrice >= 0 && triggerQuantity*getPrice() > discountPrice) {
+		if(discountPrice > 0 && triggerQuantity > 0 && triggerQuantity*getPrice() > discountPrice) {
 			specialTriggerQuantity = triggerQuantity;
 			specialDiscountPrice = discountPrice;
 			specialDiscountedQuantity = 0;
