@@ -111,13 +111,21 @@ public class ItemTest {
 	}
 	
 	@Test
-	public void BuyNGetMForXPercentOffMustHavePercentBetweenZeroAndHundred() {
+	public void BuyNGetMForXPercentOffMustHavePercentBetweenZeroAndHundredInclusive() {
 		quantifiedItem.setSpecial(2, 1, -0.01);
 		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
 		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
 		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
 		
 		quantifiedItem.setSpecial(2, 1, 100.01);
+		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+	}
+	
+	@Test
+	public void BuyNGetMForXPercentOffMustHaveTriggerQuantityGreaterThenEqualToZero() {
+		quantifiedItem.setSpecial(-1, 1, 100.0);
 		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
 		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
 		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
