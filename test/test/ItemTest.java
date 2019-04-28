@@ -171,20 +171,25 @@ public class ItemTest {
 	}
 	
 	@Test
-	public void itemNameCannotBeNull() {
+	public void itemNameCannotBeNullOrEmptyString() {
 		try {
 			QuantifiedItem quantifiedItem = new QuantifiedItem(null, 0.00);
+		} catch (IllegalArgumentException ex) {
+			assertEquals(ex.getMessage(), "Item name cannot be null or empty String");
+		}
+		try {
+			QuantifiedItem quantifiedItem = new QuantifiedItem("", 0.00);
 		} catch (IllegalArgumentException ex) {
 			assertEquals(ex.getMessage(), "Item name cannot be null or empty String");
 		}
 	}
 	
 	@Test
-	public void itemNameCannotBeEmptyString() {
+	public void itemPriceMustBeGreaterThanZero() {
 		try {
-			QuantifiedItem quantifiedItem = new QuantifiedItem("", 0.00);
+			QuantifiedItem quantifiedItem = new QuantifiedItem("Test", 0.00);
 		} catch (IllegalArgumentException ex) {
-			assertEquals(ex.getMessage(), "Item name cannot be null or empty String");
+			assertEquals(ex.getMessage(), "Item price must be greater than zero");
 		}
 	}
 }
