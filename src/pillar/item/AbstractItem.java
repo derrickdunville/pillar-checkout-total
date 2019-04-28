@@ -27,6 +27,9 @@ public abstract class AbstractItem<V> {
 	}
 	
 	public void setMarkdown(double markdownAmount) {
+		if(markdownAmount >= getPrice()) {
+			throw new IllegalArgumentException("Markdown amount must be less than item price.");
+		}
 		this.markdown = markdownAmount;
 	}
 		

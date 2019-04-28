@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -190,6 +191,23 @@ public class ItemTest {
 			QuantifiedItem quantifiedItem = new QuantifiedItem("Test", 0.00);
 		} catch (IllegalArgumentException ex) {
 			assertEquals(ex.getMessage(), "Item price must be greater than zero");
+		}
+	}
+	
+	@Test
+	public void markdownCannotBeGreaterThenEqualPrice() {
+		try {
+			quantifiedItem.setMarkdown(quantifiedItem.getPrice());
+			assertTrue(quantifiedItem.getPrice() > 0);
+		} catch (IllegalArgumentException ex) {
+			assertEquals(ex.getMessage(), "Markdown amount must be less than item price.");
+		}
+		
+		try {
+			quantifiedItem.setMarkdown(quantifiedItem.getPrice() + .01);
+			assertTrue(quantifiedItem.getPrice() > 0);
+		} catch (IllegalArgumentException ex) {
+			assertEquals(ex.getMessage(), "Markdown amount must be less than item price.");
 		}
 	}
 }
