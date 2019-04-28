@@ -130,4 +130,12 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
 		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
 	}
+	
+	@Test
+	public void BuyNGetMForXPercentOffMustHaveDiscountedQuantityGreaterThenEqualToZero() {
+		quantifiedItem.setSpecial(1, -1, 100.0);
+		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+	}
 }
