@@ -23,8 +23,10 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 	}
 	
 	public void setSpecial(int triggerQuantity, double discountPrice) {
-		specialTriggerQuantity = triggerQuantity;
-		specialDiscountPrice = discountPrice;
+		if(triggerQuantity*getPrice() > discountPrice) {
+			specialTriggerQuantity = triggerQuantity;
+			specialDiscountPrice = discountPrice;
+		}
 	}
 	
 	public void setSpecialLimit(int limit) {

@@ -74,4 +74,11 @@ public class ItemTest {
 		quantifiedItem.setSpecialLimit(6);
 		assertEquals(quantifiedItem.getSpecialLimit(), 6);
 	}
+	
+	@Test
+	public void specialMustBeCheaperThenFullPrice() {
+		quantifiedItem.setSpecial(3, quantifiedItem.getPrice()*3 + .01);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
+	}
 }
