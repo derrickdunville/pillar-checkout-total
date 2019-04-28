@@ -101,4 +101,12 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
 		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
 	}
+	
+	@Test
+	public void canClearNForXSpecial() {
+		quantifiedItem.setSpecial(3, 5);
+		quantifiedItem.setSpecial(0, 0.0);
+		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
+		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+	}
 }
