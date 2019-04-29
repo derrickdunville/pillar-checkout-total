@@ -284,7 +284,10 @@ public class ItemTest {
 		} finally {
 			assertTrue(rangeExceptionCaught);
 		}
-		
+	}
+	
+	@Test
+	public void settingBuyMGetNForXPercentOffWeightedItemWhenMIsNotEqualOrLesserThanNShouldThrowInvalidSpecialException() {
 		boolean invalidSpecialExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(1.0, 1.01, 100.00);
