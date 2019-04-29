@@ -15,7 +15,17 @@ public class WeightedItem extends AbstractItem<Double> {
 		specialDiscountPercent = 0.0;
 	}
 	
-	public void setSpecial(double triggerWeight, double discountedWeight, double discountPercent) {
+	public void setSpecial(double triggerWeight, double discountedWeight, double discountPercent) throws RangeException {
+		if(triggerWeight == 0.0 && discountedWeight == 0.0 && discountPercent == 0.0) {
+			specialTriggerWeight = 0.0;
+			specialDiscountedWeight = 0.0;
+			specialDiscountPercent = 0.0;
+			return;
+		}
+		if(triggerWeight == 0.0 || discountedWeight == 0.0 || discountPercent == 0.0) {
+			throw new RangeException("trigger weight, discounted weight and discount percent must either all be 0.0 or all greater than 0.0");
+
+		}
 		specialTriggerWeight = triggerWeight;
 		specialDiscountedWeight = discountedWeight;
 		specialDiscountPercent = discountPercent;

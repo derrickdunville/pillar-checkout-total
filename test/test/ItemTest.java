@@ -171,7 +171,7 @@ public class ItemTest {
 	}
 	
 	@Test
-	public void settingBuyNGetMForXPercentOffWithAValueNotWithinRangeShouldThrowRangeException() {
+	public void settingBuyNGetMForXPercentOffForQuantifiedItemWithAValueNotWithinRangeShouldThrowRangeException() {
 		boolean rangeExceptionCaught = false;
 		try {
 			quantifiedItem.setSpecial(0, 1, 100.00);
@@ -200,6 +200,42 @@ public class ItemTest {
 		} catch (RangeException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger quantity, discounted quantity and discount percent must either all be 0 or all greater than 0.");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
+	}
+	
+	@Test
+	public void settingBuyNGetMForXPercentOffForWeightedItemWithAValueNotWithinRangeShouldThrowRangeException() {
+		boolean rangeExceptionCaught = false;
+		try {
+			weightedItem.setSpecial(0.0, 1.0, 100.00);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "trigger weight, discounted weight and discount percent must either all be 0.0 or all greater than 0.0");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
+		
+		rangeExceptionCaught = false;
+		try {
+			weightedItem.setSpecial(1.0, 0.0, 100.00);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "trigger weight, discounted weight and discount percent must either all be 0.0 or all greater than 0.0");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
+		
+		rangeExceptionCaught = false;
+		try {
+			weightedItem.setSpecial(1.0, 1.0, 0.0);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "trigger weight, discounted weight and discount percent must either all be 0.0 or all greater than 0.0");
 			rangeExceptionCaught = true;
 		} finally {
 			assertTrue(rangeExceptionCaught);

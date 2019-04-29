@@ -345,10 +345,10 @@ public class CheckoutTest {
 	
 	@Test
 	public void canScanWeightedItemThreePoundsWithBuyTwoPoundsGetOnePoundFreeSpecial() {
-		weightedItemOne.setSpecial(2.0, 1.0, 100.0);
 		try {
+			weightedItemOne.setSpecial(2.0, 1.0, 100.0);
 			assertEquals(checkout.scanItem(weightedItemOne.getName(), 3.0), weightedItemOne.getPrice() * 2.0, delta);
-		} catch (ItemNotFoundException | QuantifiedItemException e) {
+		} catch (ItemNotFoundException | QuantifiedItemException | RangeException e) {
 			fail();
 		}
 	}
