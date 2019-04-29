@@ -211,7 +211,7 @@ public class ItemTest {
 		boolean rangeExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(0.0, 1.0, 100.00);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger weight, discounted weight and discount percent must either all be 0.0 or all greater than 0.0");
 			rangeExceptionCaught = true;
@@ -222,7 +222,7 @@ public class ItemTest {
 		rangeExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(1.0, 0.0, 100.00);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger weight, discounted weight and discount percent must either all be 0.0 or all greater than 0.0");
 			rangeExceptionCaught = true;
@@ -233,7 +233,7 @@ public class ItemTest {
 		rangeExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(1.0, 1.0, 0.0);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger weight, discounted weight and discount percent must either all be 0.0 or all greater than 0.0");
 			rangeExceptionCaught = true;
@@ -244,7 +244,7 @@ public class ItemTest {
 		rangeExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(-1.0, 1.0, 100.0);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger weight must be greater than 0.0");
 			rangeExceptionCaught = true;
@@ -255,7 +255,7 @@ public class ItemTest {
 		rangeExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(1.0, -1.0, 100.0);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "discounted weight must be greater than 0.0");
 			rangeExceptionCaught = true;
@@ -266,7 +266,7 @@ public class ItemTest {
 		rangeExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(1.0, 1.0, -1.0);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "discounted percent must be greater than equal 0.0 and less than equal 100.00");
 			rangeExceptionCaught = true;
@@ -277,12 +277,23 @@ public class ItemTest {
 		rangeExceptionCaught = false;
 		try {
 			weightedItem.setSpecial(1.0, 1.0, 100.01);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "discounted percent must be greater than equal 0.0 and less than equal 100.00");
 			rangeExceptionCaught = true;
 		} finally {
 			assertTrue(rangeExceptionCaught);
+		}
+		
+		boolean invalidSpecialExceptionCaught = false;
+		try {
+			weightedItem.setSpecial(1.0, 1.01, 100.00);
+		} catch (RangeException | InvalidSpecialException e) {
+			assertTrue(e instanceof InvalidSpecialException);
+			assertEquals(e.getMessage(), "discounted weight must be equal or lesser than trigger weight");
+			invalidSpecialExceptionCaught = true;
+		} finally {
+			assertTrue(invalidSpecialExceptionCaught);
 		}
 	}
 	

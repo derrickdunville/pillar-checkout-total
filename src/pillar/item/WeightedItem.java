@@ -1,5 +1,6 @@
 package pillar.item;
 
+import pillar.item.exception.InvalidSpecialException;
 import pillar.item.exception.RangeException;
 
 public class WeightedItem extends AbstractItem<Double> {
@@ -15,7 +16,7 @@ public class WeightedItem extends AbstractItem<Double> {
 		specialDiscountPercent = 0.0;
 	}
 	
-	public void setSpecial(double triggerWeight, double discountedWeight, double discountPercent) throws RangeException {
+	public void setSpecial(double triggerWeight, double discountedWeight, double discountPercent) throws RangeException, InvalidSpecialException {
 		if(triggerWeight == 0.0 && discountedWeight == 0.0 && discountPercent == 0.0) {
 			specialTriggerWeight = 0.0;
 			specialDiscountedWeight = 0.0;
@@ -28,7 +29,8 @@ public class WeightedItem extends AbstractItem<Double> {
 		if(triggerWeight < 0) throw new RangeException("trigger weight must be greater than 0.0");
 		if(discountedWeight < 0) throw new RangeException("discounted weight must be greater than 0.0");
 		if(discountPercent < 0 || discountPercent > 100.00) throw new RangeException("discounted percent must be greater than equal 0.0 and less than equal 100.00");
-
+		if(discountedWeight > triggerWeight) throw new InvalidSpecialException("discounted weight must be equal or lesser than trigger weight");
+	
 		specialTriggerWeight = triggerWeight;
 		specialDiscountedWeight = discountedWeight;
 		specialDiscountPercent = discountPercent;
