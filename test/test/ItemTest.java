@@ -171,7 +171,9 @@ public class ItemTest {
 		assertEquals(quantifiedItem.getSpecialLimit(), 0);
 	}
 	
+	
 	@Test
+	@SuppressWarnings("unused")
 	public void itemNameCannotBeNullOrEmptyString() {
 		try {
 			QuantifiedItem quantifiedItem = new QuantifiedItem(null, 0.00);
@@ -186,6 +188,7 @@ public class ItemTest {
 	}
 	
 	@Test
+	@SuppressWarnings("unused")
 	public void itemPriceMustBeGreaterThanZero() {
 		try {
 			QuantifiedItem quantifiedItem = new QuantifiedItem("Test", 0.00);

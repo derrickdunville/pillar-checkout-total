@@ -6,6 +6,8 @@ import java.util.Map;
 import pillar.item.AbstractItem;
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
+import pillar.item.exception.ItemNotFoundException;
+import pillar.item.exception.WeightedItemException;
 
 public class Checkout {
 
@@ -13,20 +15,29 @@ public class Checkout {
 	private HashMap<String, Object> scannedItems;
 	
 	public Checkout(Store store) {
+		if(store == null) {
+			throw new IllegalArgumentException("Store can not be null.");
+		}
 		this.store = store;
 		scannedItems = new HashMap<String, Object>();
 	}
 	
-	public double scanItem(String itemName) {
-		if(store.getItem(itemName) != null) {
-			if(scannedItems.get(itemName) != null) {
-				scannedItems.put(itemName, (Integer) scannedItems.get(itemName) + 1);
-			} else {
-				scannedItems.put(itemName, 1);
-			}
+	public double scanItem(String itemName) throws ItemNotFoundException, WeightedItemException {
+		AbstractItem<?> targetItem = store.getItem(itemName);
+		if(targetItem == null) {
+			throw new ItemNotFoundException();
+		}
+		
+		if(targetItem instanceof WeightedItem) {
+			throw new WeightedItemException("Must provide item weight");
+		}
+
+		if(scannedItems.get(itemName) != null) {
+			scannedItems.put(itemName, (Integer) scannedItems.get(itemName) + 1);
+		} else {
+			scannedItems.put(itemName, 1);
 		}
 		return getTotal();
-		
 	}
 
 	public double scanItem(String itemName, double weight) {

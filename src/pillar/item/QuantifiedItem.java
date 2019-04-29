@@ -38,7 +38,6 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 			specialDiscountedQuantity = 0;
 			specialDiscountPercent = 0.0;
 		}
-		
 	}
 	
 	public void setSpecialLimit(int limit) {

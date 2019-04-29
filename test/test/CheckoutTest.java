@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +11,8 @@ import pillar.Checkout;
 import pillar.Store;
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
+import pillar.item.exception.ItemNotFoundException;
+import pillar.item.exception.WeightedItemException;
 
 public class CheckoutTest {
 
@@ -39,20 +43,32 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanAQuantifiedItem() {
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 2.59, delta);
+	public void canScanAQuantifiedItem(){
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 2.59, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanTwoDifferentQuantifiedItems() {
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + quantifiedItemTwo.getPrice(), delta);
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + quantifiedItemTwo.getPrice(), delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanAQuantifiedItemMultipleTimes() {
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*2, delta);
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*2, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -74,23 +90,35 @@ public class CheckoutTest {
 	
 	@Test
 	public void canScanBothAWeightedItemAndAQuatifiedItem() {
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanMultipleWeightedItemsAndQuatifiedItems() {
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
-		assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice(), delta);
-		assertEquals(checkout.scanItem(weightedItemTwo.getName(), 2.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice() + weightedItemTwo.getPrice() * 2.5, delta);
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
+			assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice(), delta);
+			assertEquals(checkout.scanItem(weightedItemTwo.getName(), 2.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice() + weightedItemTwo.getPrice() * 2.5, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanAQuantifiedItemWithAMarkdown() {
-		double priceBeforeMarkdown = quantifiedItemOne.getPrice();
-		quantifiedItemOne.setMarkdown(0.29);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
+		try {
+			double priceBeforeMarkdown = quantifiedItemOne.getPrice();
+			quantifiedItemOne.setMarkdown(0.29);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -102,119 +130,167 @@ public class CheckoutTest {
 	
 	@Test 
 	public void scanTwoWithBuyOneGetOneFreeSpecial() {
-		quantifiedItemOne.setSpecial(1, 1, 100.00);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		// 2nd Item should be free
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		try {
+			quantifiedItemOne.setSpecial(1, 1, 100.00);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			// 2nd Item should be free
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
-	public void canScanThreeWithBuyTwoGetOneFreeSpecial() {
-		quantifiedItemOne.setSpecial(2, 1, 100.00);
-		// Scan 2 items
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		// Scan a 3rd item and should be total of 2, since buy 2 get 1 free special is set
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+	public void canScanThreeWithBuyTwoGetOneFreeSpecial() throws ItemNotFoundException, WeightedItemException {
+		try {
+			quantifiedItemOne.setSpecial(2, 1, 100.00);
+			// Scan 2 items
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			// Scan a 3rd item and should be total of 2, since buy 2 get 1 free special is set
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 		
 	@Test
 	public void canScanSixWithBuyTwoGetOneFreeSpecial() {
-		quantifiedItemOne.setSpecial(2, 1, 100.00);
-		// Scan 2 items
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		// Scan a 3rd item and should be total of 2, since buy 2 get 1 free special is set
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 4, delta);
-		// Scan a 6th item and should get 2 for free
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 4, delta);
+		try {
+			quantifiedItemOne.setSpecial(2, 1, 100.00);
+			// Scan 2 items
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			// Scan a 3rd item and should be total of 2, since buy 2 get 1 free special is set
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 4, delta);
+			// Scan a 6th item and should get 2 for free
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 4, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanTwoWithBuyOneGetOneHalfOffSpecial() {
-		quantifiedItemOne.setSpecial(1, 1, 50.00);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		// 2nd item should be half price
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 1.5, delta);
+		try {
+			quantifiedItemOne.setSpecial(1, 1, 50.00);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			// 2nd item should be half price
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 1.5, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanFourWithBuyTwoGetTwoHalfOffSpecial() {
-		// essentially the same as buy 3 get one free
-		quantifiedItemOne.setSpecial(2, 2, 50.00);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
-		// Scanning a 4th should trigger the special
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
+		try {
+			// essentially the same as buy 3 get one free
+			quantifiedItemOne.setSpecial(2, 2, 50.00);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
+			// Scanning a 4th should trigger the special
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 3, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanThreeWithThreeForFiveSpecial() {
-		quantifiedItemOne.setSpecial(3, 5.00);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
+		try {
+			quantifiedItemOne.setSpecial(3, 5.00);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
-	public void canScanFiveWithThreeForFiveSpecial() {
-		quantifiedItemOne.setSpecial(3, 5.00);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
+	public void canScanFiveWithThreeForFiveSpecial()  {
+		try {
+			quantifiedItemOne.setSpecial(3, 5.00);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanSixWithThreeForFiveSpecial() {
-		quantifiedItemOne.setSpecial(3, 5.00);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 10.00, delta);
+		try {
+			quantifiedItemOne.setSpecial(3, 5.00);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 10.00, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canScanEightWithBuyTwoGetOneFreeSpecialLimitSix() {
-		quantifiedItemOne.setSpecial(2, 1, 100.00);
-		quantifiedItemOne.setSpecialLimit(6);
-		for(int i = 0; i < 7; ++i) {
-			checkout.scanItem(quantifiedItemOne.getName());
+		try {
+			quantifiedItemOne.setSpecial(2, 1, 100.00);
+			quantifiedItemOne.setSpecialLimit(6);
+			for(int i = 0; i < 7; ++i) {
+				checkout.scanItem(quantifiedItemOne.getName());
+			}
+			// 8th item should not be discounted since limit is 6
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*6, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
 		}
-		// 8th item should not be discounted since limit is 6
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*6, delta);
 	}
 	
 	@Test
 	public void canScanNineWithThreeForFiveSpecialLimitSix() {
-		quantifiedItemOne.setSpecial(3, 5.00);
-		quantifiedItemOne.setSpecialLimit(6);
-		for(int i = 0; i < 8; ++i) {
-			checkout.scanItem(quantifiedItemOne.getName());
+		try {
+			quantifiedItemOne.setSpecial(3, 5.00);
+			quantifiedItemOne.setSpecialLimit(6);
+			for(int i = 0; i < 8; ++i) {
+				checkout.scanItem(quantifiedItemOne.getName());
+			}
+			// 3rd set of 3 should be full price
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*3 + 10.00, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
 		}
-		// 3rd set of 3 should be full price
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*3 + 10.00, delta);
 	}
 	
 	@Test
 	public void canRemoveAScannedQuantifiedItem() {
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.removeItem(quantifiedItemOne.getName()), 0, delta);		
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.removeItem(quantifiedItemOne.getName()), 0, delta);	
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void canRemoveQuantifiedItemThatHasABuy2Get1FreeSpecial() {
-		quantifiedItemOne.setSpecial(2, 1, 100.00);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2 , delta);
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
-		assertEquals(checkout.removeItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);		
+		try {
+			quantifiedItemOne.setSpecial(2, 1, 100.00);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2 , delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
+			assertEquals(checkout.removeItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);	
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -232,16 +308,29 @@ public class CheckoutTest {
 	
 	@Test
 	public void canScanTwoWithBuyOneGetOneFreeSpecialAndMarkdown() {
-		double priceBeforeMarkdown = quantifiedItemOne.getPrice();
-		quantifiedItemOne.setSpecial(1, 1, 100.0);
-		quantifiedItemOne.setMarkdown(0.29);
-		checkout.scanItem(quantifiedItemOne.getName());
-		assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
+		try {
+			double priceBeforeMarkdown = quantifiedItemOne.getPrice();
+			quantifiedItemOne.setSpecial(1, 1, 100.0);
+			quantifiedItemOne.setMarkdown(0.29);
+			checkout.scanItem(quantifiedItemOne.getName());
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void cantScanAQuantifiedItemThatIsNotAValidStoreItem() {
-		assertEquals(checkout.scanItem(quantifiedItemNotInStore.getName()), 0.0, delta);
+		boolean exceptionCaught = false;
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemNotInStore.getName()), 0.0, delta);
+		} catch (ItemNotFoundException | WeightedItemException ex) {
+			exceptionCaught = true;
+			assertTrue(ex instanceof ItemNotFoundException);
+			assertEquals(ex.getMessage(), "Item not found");
+		} finally {
+			assertTrue(exceptionCaught);
+		}
 	}
 	
 	@Test
@@ -251,13 +340,31 @@ public class CheckoutTest {
 	
 	@Test
 	public void cantRemoveAQuantifiedItemHasNotBeenScanned() {
-		checkout.scanItem(quantifiedItemOne.getName());
-		assertEquals(checkout.removeItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice(), delta);
+		try {
+			checkout.scanItem(quantifiedItemOne.getName());
+			assertEquals(checkout.removeItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice(), delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void cantRemoveAWeightedItemHasNotBeenScanned() {
 		checkout.scanItem(weightedItemOne.getName(), 1.5);
 		assertEquals(checkout.removeItem(weightedItemTwo.getName(), 2.0), weightedItemOne.getPrice() * 1.5, delta);
+	}
+	
+	@Test
+	@SuppressWarnings("unused")
+	public void storeCannotBeNull() {
+		boolean exceptionCaught = false;
+		try {
+			Checkout testCheckout = new Checkout(null);
+		} catch (IllegalArgumentException ex) {
+			exceptionCaught = true;
+			assertEquals(ex.getMessage(), "Store can not be null.");
+		} finally {
+			assertTrue(exceptionCaught);
+		}
 	}
 }
