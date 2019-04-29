@@ -262,6 +262,28 @@ public class ItemTest {
 		} finally {
 			assertTrue(rangeExceptionCaught);
 		}
+		
+		rangeExceptionCaught = false;
+		try {
+			weightedItem.setSpecial(1.0, 1.0, -1.0);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "discounted percent must be greater than equal 0.0 and less than equal 100.00");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
+		
+		rangeExceptionCaught = false;
+		try {
+			weightedItem.setSpecial(1.0, 1.0, 100.01);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "discounted percent must be greater than equal 0.0 and less than equal 100.00");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
 	}
 	
 	@Test
