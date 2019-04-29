@@ -11,7 +11,7 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 	private double specialDiscountPrice; 
 	private int specialQuanitityLimit; 
 	
-	public QuantifiedItem(String itemName, double itemPrice) {
+	public QuantifiedItem(String itemName, double itemPrice) throws RangeException {
 		super(itemName, itemPrice);
 		specialTriggerQuantity = 0;
 		specialDiscountedQuantity = 0;

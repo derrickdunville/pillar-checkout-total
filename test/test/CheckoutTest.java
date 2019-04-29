@@ -31,18 +31,22 @@ public class CheckoutTest {
 	
 	@Before
 	public void initializeTest() {
-		store = new Store();
-		quantifiedItemOne = new QuantifiedItem("QuantifiedItemOne", 2.59);
-		quantifiedItemTwo = new QuantifiedItem("QuantifiedItemTwo", 1.59);
-		quantifiedItemNotInStore = new QuantifiedItem("NotInStore", 1.29);
-		weightedItemOne = new WeightedItem("WeightedItemOne", 1.49);
-		weightedItemTwo = new WeightedItem("WeightedItemTwo", 1.79);
-		weightedItemNotInStore = new WeightedItem("WeightedNotInStore", 1.29);
-		store.addItem(quantifiedItemOne);
-		store.addItem(quantifiedItemTwo);
-		store.addItem(weightedItemOne);
-		store.addItem(weightedItemTwo);
-		checkout = new Checkout(store);
+		try {
+			store = new Store();
+			quantifiedItemOne = new QuantifiedItem("QuantifiedItemOne", 2.59);
+			quantifiedItemTwo = new QuantifiedItem("QuantifiedItemTwo", 1.59);
+			quantifiedItemNotInStore = new QuantifiedItem("NotInStore", 1.29);
+			weightedItemOne = new WeightedItem("WeightedItemOne", 1.49);
+			weightedItemTwo = new WeightedItem("WeightedItemTwo", 1.79);
+			weightedItemNotInStore = new WeightedItem("WeightedNotInStore", 1.29);
+			store.addItem(quantifiedItemOne);
+			store.addItem(quantifiedItemTwo);
+			store.addItem(weightedItemOne);
+			store.addItem(weightedItemTwo);
+			checkout = new Checkout(store);
+		} catch (RangeException e) {
+			fail();
+		}
 	}
 	
 	
@@ -95,7 +99,7 @@ public class CheckoutTest {
 			double priceBeforeMarkdown = quantifiedItemOne.getPrice();
 			quantifiedItemOne.setMarkdown(0.29);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), priceBeforeMarkdown - 0.29, delta);
-		} catch (ItemNotFoundException | WeightedItemException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
 			fail();
 		}
 	}
@@ -146,7 +150,7 @@ public class CheckoutTest {
 			double priceBeforeMarkdown = weightedItemOne.getPrice();
 			weightedItemOne.setMarkdown(0.39);
 			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), (priceBeforeMarkdown - 0.39)*1.5, delta);
-		} catch (ItemNotFoundException | QuantifiedItemException e) {
+		} catch (ItemNotFoundException | QuantifiedItemException | RangeException e) {
 			fail();
 		}
 	}

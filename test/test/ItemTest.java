@@ -20,8 +20,12 @@ public class ItemTest {
 	
 	@Before
 	public void initializeTest() {
-		quantifiedItem = new QuantifiedItem("QuantifiedItem", 2.59);
-		weightedItem = new WeightedItem("WeightedItem", 2.59);
+		try {
+			quantifiedItem = new QuantifiedItem("QuantifiedItem", 2.59);
+			weightedItem = new WeightedItem("WeightedItem", 2.59);
+		} catch (RangeException e) {
+			fail();
+		}	
 	}
 	
 	@Test
@@ -48,13 +52,17 @@ public class ItemTest {
 	
 	@Test
 	public void markdownAnItem() {
-		double priceBeforeMarkdown = quantifiedItem.getPrice();
-		quantifiedItem.setMarkdown(0.29);
-		assertEquals(quantifiedItem.getPrice(), priceBeforeMarkdown - 0.29, delta);
-		
-		priceBeforeMarkdown = weightedItem.getPrice();
-		weightedItem.setMarkdown(0.39);
-		assertEquals(weightedItem.getPrice(), priceBeforeMarkdown - 0.39, delta);
+		try {
+			double priceBeforeMarkdown = quantifiedItem.getPrice();
+			quantifiedItem.setMarkdown(0.29);
+			assertEquals(quantifiedItem.getPrice(), priceBeforeMarkdown - 0.29, delta);
+			
+			priceBeforeMarkdown = weightedItem.getPrice();
+			weightedItem.setMarkdown(0.39);
+			assertEquals(weightedItem.getPrice(), priceBeforeMarkdown - 0.39, delta);
+		} catch (RangeException e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -269,12 +277,12 @@ public class ItemTest {
 	public void itemNameCannotBeNullOrEmptyString() {
 		try {
 			QuantifiedItem quantifiedItem = new QuantifiedItem(null, 0.00);
-		} catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException | RangeException ex) {
 			assertEquals(ex.getMessage(), "Item name cannot be null or empty String");
 		}
 		try {
 			QuantifiedItem quantifiedItem = new QuantifiedItem("", 0.00);
-		} catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException | RangeException ex) {
 			assertEquals(ex.getMessage(), "Item name cannot be null or empty String");
 		}
 	}
@@ -282,27 +290,42 @@ public class ItemTest {
 	@Test
 	@SuppressWarnings("unused")
 	public void itemPriceMustBeGreaterThanZero() {
+		boolean rangeExceptionCaught = false;
 		try {
 			QuantifiedItem quantifiedItem = new QuantifiedItem("Test", 0.00);
-		} catch (IllegalArgumentException ex) {
-			assertEquals(ex.getMessage(), "Item price must be greater than zero");
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			rangeExceptionCaught = true;
+			assertEquals(e.getMessage(), "Item price must be greater than zero");
+		} finally {
+			assertTrue(rangeExceptionCaught);
 		}
 	}
 	
 	@Test
 	public void markdownCannotBeGreaterThenEqualPrice() {
+		boolean rangeExceptionCaught = false;
 		try {
 			quantifiedItem.setMarkdown(quantifiedItem.getPrice());
 			assertTrue(quantifiedItem.getPrice() > 0);
-		} catch (IllegalArgumentException ex) {
-			assertEquals(ex.getMessage(), "Markdown amount must be less than item price.");
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			rangeExceptionCaught = true;
+			assertEquals(e.getMessage(), "Markdown amount must be less than item price.");
+		} finally {
+			assertTrue(rangeExceptionCaught);
 		}
 		
+		rangeExceptionCaught = false;
 		try {
 			quantifiedItem.setMarkdown(quantifiedItem.getPrice() + .01);
 			assertTrue(quantifiedItem.getPrice() > 0);
-		} catch (IllegalArgumentException ex) {
-			assertEquals(ex.getMessage(), "Markdown amount must be less than item price.");
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			rangeExceptionCaught = true;
+			assertEquals(e.getMessage(), "Markdown amount must be less than item price.");
+		} finally {
+			assertTrue(rangeExceptionCaught);
 		}
 	}
 }

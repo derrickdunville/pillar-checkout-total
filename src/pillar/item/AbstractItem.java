@@ -1,16 +1,18 @@
 package pillar.item;
 
+import pillar.item.exception.RangeException;
+
 public abstract class AbstractItem<V> {
 	private String name;
 	private double price;
 	private double markdown;
 	
-	public AbstractItem(String itemName, double itemPrice) {
+	public AbstractItem(String itemName, double itemPrice) throws RangeException {
 		if(itemName == null || itemName.equals("")) {
 			throw new IllegalArgumentException("Item name cannot be null or empty String");
 		}
 		if(itemPrice <= 0) {
-			throw new IllegalArgumentException("Item price must be greater than zero");
+			throw new RangeException("Item price must be greater than zero");
 		}
 		
 		this.name = itemName;
@@ -26,9 +28,9 @@ public abstract class AbstractItem<V> {
 		return this.price - this.markdown;
 	}
 	
-	public void setMarkdown(double markdownAmount) {
+	public void setMarkdown(double markdownAmount) throws RangeException {
 		if(markdownAmount >= getPrice()) {
-			throw new IllegalArgumentException("Markdown amount must be less than item price.");
+			throw new RangeException("Markdown amount must be less than item price.");
 		}
 		this.markdown = markdownAmount;
 	}

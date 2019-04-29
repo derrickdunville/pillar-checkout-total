@@ -1,12 +1,14 @@
 package pillar.item;
 
+import pillar.item.exception.RangeException;
+
 public class WeightedItem extends AbstractItem<Double> {
 
 	private double specialTriggerWeight; 
 	private double specialDiscountedWeight;
 	private double specialDiscountPercent;
 	
-	public WeightedItem(String itemName, double itemPrice) {
+	public WeightedItem(String itemName, double itemPrice) throws RangeException {
 		super(itemName, itemPrice);
 		specialTriggerWeight = 0.0;
 		specialDiscountedWeight = 0.0;

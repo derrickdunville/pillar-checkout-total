@@ -1,11 +1,13 @@
 package test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import pillar.Store;
 import pillar.item.QuantifiedItem;
+import pillar.item.exception.RangeException;
 
 public class StoreTest {
 
@@ -17,9 +19,13 @@ public class StoreTest {
 	
 	@Test
 	public void canAddQuantifiedItemToStore() {
-		QuantifiedItem testItem = new QuantifiedItem("Test", 2.59);
-		Store testStore = new Store();
-		testStore.addItem(testItem);
-		assertTrue(testStore.getItem(testItem.getName()) != null);
+		try {
+			QuantifiedItem testItem = new QuantifiedItem("Test", 2.59);
+			Store testStore = new Store();
+			testStore.addItem(testItem);
+			assertTrue(testStore.getItem(testItem.getName()) != null);
+		} catch (RangeException e) {
+			fail();
+		}
 	}
 }
