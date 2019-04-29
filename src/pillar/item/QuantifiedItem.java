@@ -29,14 +29,24 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		specialDiscountPrice = 0.0;
 	}
 	
-	public void setSpecial(int triggerQuantity, double discountPrice) {
+	public void setSpecial(int triggerQuantity, double discountPrice) throws RangeException {
 		if(triggerQuantity == 0 && discountPrice == 0.00) {
 			specialTriggerQuantity = 0;
 			specialDiscountPrice = 0.0;
 			return;
 		}
 		
-		if(discountPrice > 0 && triggerQuantity > 0 && triggerQuantity*getPrice() > discountPrice) {
+		if(triggerQuantity == 0 || discountPrice == 0.0) {
+			throw new RangeException("trigger quantity and discount price must either be both 0 or both greater than 0.");
+		}
+		if(triggerQuantity < 0) {
+			throw new RangeException("trigger quantity must be greater than or equal to 0.");
+		}
+		if(discountPrice < 0.00) {
+			throw new RangeException("discount price must be greater than or equal to 0.");
+		}
+		
+		if(triggerQuantity*getPrice() > discountPrice) {
 			specialTriggerQuantity = triggerQuantity;
 			specialDiscountPrice = discountPrice;
 			specialDiscountedQuantity = 0;

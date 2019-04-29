@@ -207,7 +207,7 @@ public class CheckoutTest {
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
-		} catch (ItemNotFoundException | WeightedItemException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
 			fail();
 		}
 	}
@@ -221,7 +221,7 @@ public class CheckoutTest {
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
-		} catch (ItemNotFoundException | WeightedItemException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
 			fail();
 		}
 	}
@@ -236,7 +236,7 @@ public class CheckoutTest {
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 10.00, delta);
-		} catch (ItemNotFoundException | WeightedItemException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
 			fail();
 		}
 	}
