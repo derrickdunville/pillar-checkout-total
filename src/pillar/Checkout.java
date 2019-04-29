@@ -61,24 +61,28 @@ public class Checkout {
 		return getTotal();
 	}
 	
-	public double removeItem(String itemName) {
+	public double removeItem(String itemName) throws ItemNotFoundException {
 		if(scannedItems.get(itemName) != null) {
 			if((Integer) scannedItems.get(itemName) > 1) {
 				scannedItems.put(itemName, (Integer) scannedItems.get(itemName) - 1);
 			} else {
 				scannedItems.remove(itemName);
 			}
+		} else {
+			throw new ItemNotFoundException();
 		}
 		return getTotal();
 	}
 	
-	public double removeItem(String itemName, double weight) {
+	public double removeItem(String itemName, double weight) throws ItemNotFoundException {
 		if(scannedItems.get(itemName) != null) {
 			if((Double) scannedItems.get(itemName) > weight) {
 				scannedItems.put(itemName, (Double) scannedItems.get(itemName) - weight);
 			} else {
 				scannedItems.remove(itemName);
 			}
+		} else {
+			throw new ItemNotFoundException();
 		}
 		return getTotal();
 	}

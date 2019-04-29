@@ -374,24 +374,30 @@ public class CheckoutTest {
 	}
 	
 	@Test
-//	TODO
-	public void cantRemoveAQuantifiedItemHasNotBeenScanned() {
+	public void removingAQuantifiedItemThatHasNotBeenScannedShouldThrowItemNotFoundException() {
+		boolean itemNotFoundExceptionCaught = false;
 		try {
 			checkout.scanItem(quantifiedItemOne.getName());
 			assertEquals(checkout.removeItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice(), delta);
 		} catch (ItemNotFoundException | WeightedItemException e) {
-			fail();
+			assertTrue(e instanceof ItemNotFoundException);
+			itemNotFoundExceptionCaught = true;
+		} finally {
+			assertTrue(itemNotFoundExceptionCaught);
 		}
 	}
 	
-	// TODO
 	@Test
-	public void cantRemoveAWeightedItemHasNotBeenScanned() {
+	public void removingAWeightedItemThatHasNotBeenScannedShouldThrowItemNotFoundException() {
+		boolean itemNotFoundExceptionCaught = false;
 		try {
 			checkout.scanItem(weightedItemOne.getName(), 1.5);
 			assertEquals(checkout.removeItem(weightedItemTwo.getName(), 2.0), weightedItemOne.getPrice() * 1.5, delta);
 		} catch (ItemNotFoundException | QuantifiedItemException e) {
-			fail();
+			assertTrue(e instanceof ItemNotFoundException);
+			itemNotFoundExceptionCaught = true;
+		} finally {
+			assertTrue(itemNotFoundExceptionCaught);
 		}
 	}
 	
