@@ -20,6 +20,18 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 	}
 	
 	public void setSpecial(int triggerQuantity, int discountedQuantity, double discountPercent) throws RangeException {
+		if(triggerQuantity == 0 && discountedQuantity == 0 && discountPercent == 0.0) {
+			specialTriggerQuantity = 0;
+			specialDiscountPrice = 0.0;
+			specialDiscountedQuantity = 0;
+			specialDiscountPercent = 0.0;
+			return;
+		}
+		
+		if(triggerQuantity == 0 || discountedQuantity == 0 || discountPercent == 0.0) {
+			throw new RangeException("trigger quantity, discounted quantity and discount percent must either all be 0 or all greater than 0.");
+		}
+		
 		if(triggerQuantity < 0) throw new RangeException("trigger quantity must be greater than or equal to 0");
 		if(discountedQuantity < 0) throw new RangeException("discounted quantity must be greater than or equal to 0");
 		if(0.0 > discountPercent || 100.00 < discountPercent) throw new RangeException("discount percent must be between greater than or equal to 0.00 and less than or equal to 100.00");

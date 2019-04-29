@@ -157,6 +157,56 @@ public class ItemTest {
 	}
 	
 	@Test
+	public void canClearBuyNGetMForXPercentOffSpecial() {
+		try {
+			quantifiedItem.setSpecial(2, 1, 100.00);
+			quantifiedItem.setSpecial(0, 0, 0.0);
+			assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		} catch (RangeException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void settingBuyNGetMForXPercentOffWithAValueNotWithinRangeShouldThrowRangeException() {
+		boolean rangeExceptionCaught = false;
+		try {
+			quantifiedItem.setSpecial(0, 1, 100.00);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "trigger quantity, discounted quantity and discount percent must either all be 0 or all greater than 0.");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
+		
+		rangeExceptionCaught = false;
+		try {
+			quantifiedItem.setSpecial(1, 0, 100.00);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "trigger quantity, discounted quantity and discount percent must either all be 0 or all greater than 0.");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
+		
+		rangeExceptionCaught = false;
+		try {
+			quantifiedItem.setSpecial(1, 1, 0.0);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "trigger quantity, discounted quantity and discount percent must either all be 0 or all greater than 0.");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
+	}
+	
+	@Test
 	public void BuyNGetMForXPercentOffMustHavePercentBetweenZeroAndHundredInclusive() {
 		try {
 			quantifiedItem.setSpecial(2, 1, -0.01);
