@@ -61,7 +61,11 @@ public class Checkout {
 		return getTotal();
 	}
 	
-	public double removeItem(String itemName) throws ItemNotFoundException {
+	public double removeItem(String itemName) throws ItemNotFoundException, WeightedItemException {
+		AbstractItem<?> targetItem = store.getItem(itemName);
+		if(targetItem instanceof WeightedItem) {
+			throw new WeightedItemException("Must provide item weight");
+		}
 		if(scannedItems.get(itemName) != null) {
 			if((Integer) scannedItems.get(itemName) > 1) {
 				scannedItems.put(itemName, (Integer) scannedItems.get(itemName) - 1);
@@ -74,7 +78,11 @@ public class Checkout {
 		return getTotal();
 	}
 	
-	public double removeItem(String itemName, double weight) throws ItemNotFoundException {
+	public double removeItem(String itemName, double weight) throws ItemNotFoundException, QuantifiedItemException {
+		AbstractItem<?> targetItem = store.getItem(itemName);
+		if(targetItem instanceof QuantifiedItem) {
+			throw new QuantifiedItemException("Item weight should not be provided");
+		}
 		if(scannedItems.get(itemName) != null) {
 			if((Double) scannedItems.get(itemName) > weight) {
 				scannedItems.put(itemName, (Double) scannedItems.get(itemName) - weight);

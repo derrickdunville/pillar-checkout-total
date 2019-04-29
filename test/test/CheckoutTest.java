@@ -442,4 +442,33 @@ public class CheckoutTest {
 			assertTrue(quantifiedItemExceptionCaught);
 		}
 	}
+	
+	@Test
+	public void removingAQuantifiedItemWhileProvidingAWeightShouldThrowQuantifiedItemException() {
+		boolean quantifiedItemExceptionCaught = false;
+		try {
+			checkout.scanItem(quantifiedItemOne.getName());
+			checkout.removeItem(quantifiedItemOne.getName(), 1.50);
+		} catch (ItemNotFoundException | WeightedItemException | QuantifiedItemException e) {
+			assertTrue(e instanceof QuantifiedItemException);
+			quantifiedItemExceptionCaught = true;
+		} finally {
+			assertTrue(quantifiedItemExceptionCaught);
+		}		
+	}
+	
+	@Test
+	public void removingAWeightedItemWithoutProvidingWeightShouldThrowWeightedItemException() {
+		boolean weightedItemExceptionCaught = false;
+		try {
+			checkout.scanItem(weightedItemOne.getName(), 1.50);
+			checkout.removeItem(weightedItemOne.getName());
+		} catch (ItemNotFoundException | WeightedItemException | QuantifiedItemException e) {
+			assertTrue(e instanceof WeightedItemException);
+			weightedItemExceptionCaught = true;
+		} finally {
+			assertTrue(weightedItemExceptionCaught);
+		}		
+	}
 }
+
