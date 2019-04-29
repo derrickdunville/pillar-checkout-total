@@ -11,6 +11,7 @@ import pillar.Checkout;
 import pillar.Store;
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
+import pillar.item.exception.InvalidSpecialException;
 import pillar.item.exception.ItemNotFoundException;
 import pillar.item.exception.RangeException;
 import pillar.item.exception.WeightedItemException;
@@ -207,7 +208,7 @@ public class CheckoutTest {
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice() * 2, delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
-		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}
@@ -221,7 +222,7 @@ public class CheckoutTest {
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00, delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
-		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}
@@ -236,7 +237,7 @@ public class CheckoutTest {
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice(), delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 5.00 + quantifiedItemOne.getPrice() * 2, delta);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 10.00, delta);
-		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}
@@ -266,7 +267,7 @@ public class CheckoutTest {
 			}
 			// 3rd set of 3 should be full price
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice()*3 + 10.00, delta);
-		} catch (ItemNotFoundException | WeightedItemException | RangeException e) {
+		} catch (ItemNotFoundException | WeightedItemException | RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}

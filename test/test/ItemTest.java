@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
+import pillar.item.exception.InvalidSpecialException;
 import pillar.item.exception.RangeException;
 
 public class ItemTest {
@@ -74,7 +75,7 @@ public class ItemTest {
 			quantifiedItem.setSpecial(3, 5.00);
 			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 3);
 			assertEquals(quantifiedItem.getDiscountPrice(), 5.00, delta);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}
@@ -92,12 +93,16 @@ public class ItemTest {
 	
 	@Test
 	public void specialMustBeCheaperThenFullPrice() {
+		boolean invalidSpecialExceptionCaught = false;
 		try {
 			quantifiedItem.setSpecial(3, quantifiedItem.getPrice()*3 + .01);
+		} catch (RangeException | InvalidSpecialException e) {
+			invalidSpecialExceptionCaught = true;
+			assertTrue(e instanceof InvalidSpecialException);
+		} finally {
+			assertTrue(invalidSpecialExceptionCaught);
 			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
 			assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
-		} catch (RangeException e) {
-			fail();
 		}
 	}
 	
@@ -110,7 +115,7 @@ public class ItemTest {
 			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
 			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
 			assertEquals(quantifiedItem.getDiscountPrice(), 5.00, delta);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}
@@ -124,7 +129,7 @@ public class ItemTest {
 			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 1);
 			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
 			assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}
@@ -136,7 +141,9 @@ public class ItemTest {
 			quantifiedItem.setSpecial(0, 0.0);
 			assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
 			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
-		} catch (RangeException e) {
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		} catch (RangeException | InvalidSpecialException e) {
 			fail();
 		}
 	}
@@ -195,7 +202,8 @@ public class ItemTest {
 	public void BuyNForXMustHaveTriggerQuantityGreaterThanEqualZero() {
 		try {
 			quantifiedItem.setSpecial(-1, 5.00);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
+			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger quantity must be greater than or equal to 0.");
 		} finally {
 			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
@@ -207,7 +215,8 @@ public class ItemTest {
 	public void BuyNForXMustHaveDiscountPriceGreaterThanEqualZero() {
 		try {
 			quantifiedItem.setSpecial(2, -1.00);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
+			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "discount price must be greater than or equal to 0.");
 		} finally {
 			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
@@ -220,8 +229,9 @@ public class ItemTest {
 		boolean discountRangeExceptionCaught = false;
 		try {
 			quantifiedItem.setSpecial(2, 0);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			discountRangeExceptionCaught = true;
+			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger quantity and discount price must either be both 0 or both greater than 0.");
 		} finally {
 			assertTrue(discountRangeExceptionCaught);
@@ -232,8 +242,9 @@ public class ItemTest {
 		boolean triggerQuantityRangeExceptionCaught = false;
 		try {
 			quantifiedItem.setSpecial(0, 2.00);
-		} catch (RangeException e) {
+		} catch (RangeException | InvalidSpecialException e) {
 			triggerQuantityRangeExceptionCaught = true;
+			assertTrue(e instanceof RangeException);
 			assertEquals(e.getMessage(), "trigger quantity and discount price must either be both 0 or both greater than 0.");
 		} finally {
 			assertTrue(triggerQuantityRangeExceptionCaught);

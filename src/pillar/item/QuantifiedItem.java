@@ -1,5 +1,6 @@
 package pillar.item;
 
+import pillar.item.exception.InvalidSpecialException;
 import pillar.item.exception.RangeException;
 
 public class QuantifiedItem extends AbstractItem<Integer> {
@@ -29,10 +30,12 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		specialDiscountPrice = 0.0;
 	}
 	
-	public void setSpecial(int triggerQuantity, double discountPrice) throws RangeException {
+	public void setSpecial(int triggerQuantity, double discountPrice) throws RangeException, InvalidSpecialException {
 		if(triggerQuantity == 0 && discountPrice == 0.00) {
 			specialTriggerQuantity = 0;
 			specialDiscountPrice = 0.0;
+			specialDiscountedQuantity = 0;
+			specialDiscountPercent = 0.0;
 			return;
 		}
 		
@@ -51,6 +54,8 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 			specialDiscountPrice = discountPrice;
 			specialDiscountedQuantity = 0;
 			specialDiscountPercent = 0.0;
+		} else {
+			throw new InvalidSpecialException("special must be cheaper than full price.");
 		}
 	}
 	
