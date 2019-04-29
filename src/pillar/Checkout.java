@@ -7,6 +7,7 @@ import pillar.item.AbstractItem;
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
 import pillar.item.exception.ItemNotFoundException;
+import pillar.item.exception.QuantifiedItemException;
 import pillar.item.exception.WeightedItemException;
 
 public class Checkout {
@@ -40,7 +41,16 @@ public class Checkout {
 		return getTotal();
 	}
 
-	public double scanItem(String itemName, double weight) {
+	public double scanItem(String itemName, double weight) throws ItemNotFoundException, QuantifiedItemException {
+		AbstractItem<?> targetItem = store.getItem(itemName);
+		if(targetItem == null) {
+			throw new ItemNotFoundException();
+		}
+		
+		if(targetItem instanceof QuantifiedItem) {
+			throw new QuantifiedItemException("Item weight should not be provided");
+		}
+		
 		if(store.getItem(itemName) != null) {
 			if(scannedItems.get(itemName) != null) {
 				scannedItems.put(itemName, (Double) scannedItems.get(itemName) + weight);
