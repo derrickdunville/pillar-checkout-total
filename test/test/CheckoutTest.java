@@ -390,20 +390,6 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void scanningAWeightedItemWithoutProvidingWeightShouldThrowWeightedItemException() {
-		boolean weightedItemExceptionCaught = false;
-		try {
-			checkout.scanItem(weightedItemOne.getName());
-		} catch (ItemNotFoundException | WeightedItemException e) {
-			assertTrue(e instanceof WeightedItemException);
-			assertEquals(e.getMessage(), "Must provide item weight");
-			weightedItemExceptionCaught = true;
-		} finally {
-			assertTrue(weightedItemExceptionCaught);
-		}
-	}
-	
-	@Test
 	public void scanningAQuantifiedItemWhileProvidingWeightShouldThrowQuantifiedItemException() {
 		boolean quantifiedItemExceptionCaught = false;
 		try {
@@ -414,6 +400,20 @@ public class CheckoutTest {
 			quantifiedItemExceptionCaught = true;
 		} finally {
 			assertTrue(quantifiedItemExceptionCaught);
+		}
+	}
+	
+	@Test
+	public void scanningAWeightedItemWithoutProvidingWeightShouldThrowWeightedItemException() {
+		boolean weightedItemExceptionCaught = false;
+		try {
+			checkout.scanItem(weightedItemOne.getName());
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			assertTrue(e instanceof WeightedItemException);
+			assertEquals(e.getMessage(), "Must provide item weight");
+			weightedItemExceptionCaught = true;
+		} finally {
+			assertTrue(weightedItemExceptionCaught);
 		}
 	}
 	
