@@ -251,6 +251,17 @@ public class ItemTest {
 		} finally {
 			assertTrue(rangeExceptionCaught);
 		}
+		
+		rangeExceptionCaught = false;
+		try {
+			weightedItem.setSpecial(1.0, -1.0, 100.0);
+		} catch (RangeException e) {
+			assertTrue(e instanceof RangeException);
+			assertEquals(e.getMessage(), "discounted weight must be greater than 0.0");
+			rangeExceptionCaught = true;
+		} finally {
+			assertTrue(rangeExceptionCaught);
+		}
 	}
 	
 	@Test
