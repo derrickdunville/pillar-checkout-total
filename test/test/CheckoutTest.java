@@ -45,20 +45,25 @@ public class CheckoutTest {
 		checkout = new Checkout(store);
 	}
 	
+	
 	@Test
-	public void canScanAQuantifiedItem(){
+	@SuppressWarnings("unused")
+	public void storeCannotBeNull() {
+		boolean exceptionCaught = false;
 		try {
-			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 2.59, delta);
-		} catch (ItemNotFoundException | WeightedItemException e) {
-			fail();
+			Checkout testCheckout = new Checkout(null);
+		} catch (IllegalArgumentException ex) {
+			exceptionCaught = true;
+			assertEquals(ex.getMessage(), "Store can not be null.");
+		} finally {
+			assertTrue(exceptionCaught);
 		}
 	}
 	
 	@Test
-	public void canScanTwoDifferentQuantifiedItems() {
+	public void canScanAQuantifiedItem(){
 		try {
-			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-			assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + quantifiedItemTwo.getPrice(), delta);
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), 2.59, delta);
 		} catch (ItemNotFoundException | WeightedItemException e) {
 			fail();
 		}
@@ -75,52 +80,11 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanAWeightedItem() {
-		try {
-			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.0), weightedItemOne.getPrice() * 1.0, delta);
-		} catch (ItemNotFoundException | QuantifiedItemException e) {
-			fail();
-		}
-	}
-	
-	@Test
-	public void canScanTwoDifferentWeightedItems() {
-		try {
-			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5, delta);
-			assertEquals(checkout.scanItem(weightedItemTwo.getName(), 1.5), weightedItemOne.getPrice() * 1.5 + weightedItemTwo.getPrice() * 1.5, delta);
-		} catch (ItemNotFoundException | QuantifiedItemException e) {
-			fail();
-		}
-	}
-	
-	@Test
-	public void canScanAWeightedItemMulitipleTimes() {
-		try {
-			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5, delta);
-			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5 * 2, delta);
-		} catch (ItemNotFoundException | QuantifiedItemException e) {
-			fail();
-		}
-	}
-	
-	@Test
-	public void canScanBothAWeightedItemAndAQuatifiedItem() {
+	public void canScanTwoDifferentQuantifiedItems() {
 		try {
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
-		} catch (ItemNotFoundException | WeightedItemException | QuantifiedItemException e) {
-			fail();
-		}
-	}
-	
-	@Test
-	public void canScanMultipleWeightedItemsAndQuatifiedItems() {
-		try {
-			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
-			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
-			assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice(), delta);
-			assertEquals(checkout.scanItem(weightedItemTwo.getName(), 2.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice() + weightedItemTwo.getPrice() * 2.5, delta);
-		} catch (ItemNotFoundException | WeightedItemException | QuantifiedItemException e) {
+			assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + quantifiedItemTwo.getPrice(), delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
 			fail();
 		}
 	}
@@ -137,6 +101,46 @@ public class CheckoutTest {
 	}
 	
 	@Test
+	public void canScanAWeightedItem() {
+		try {
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.0), weightedItemOne.getPrice() * 1.0, delta);
+		} catch (ItemNotFoundException | QuantifiedItemException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void canScanAWeightedItemMulitipleTimes() {
+		try {
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5, delta);
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5 * 2, delta);
+		} catch (ItemNotFoundException | QuantifiedItemException e) {
+			fail();
+		}
+	}
+	
+	
+	@Test
+	public void canScanTwoDifferentWeightedItems() {
+		try {
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), weightedItemOne.getPrice() * 1.5, delta);
+			assertEquals(checkout.scanItem(weightedItemTwo.getName(), 1.5), weightedItemOne.getPrice() * 1.5 + weightedItemTwo.getPrice() * 1.5, delta);
+		} catch (ItemNotFoundException | QuantifiedItemException e) {
+			fail();
+		}
+	}
+
+	@Test
+	public void canScanBothAWeightedItemAndAQuatifiedItem() {
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
+		} catch (ItemNotFoundException | WeightedItemException | QuantifiedItemException e) {
+			fail();
+		}
+	}
+	
+	@Test
 	public void canScanAWeightedItemWithAMarkdown() {
 		try {
 			double priceBeforeMarkdown = weightedItemOne.getPrice();
@@ -147,8 +151,20 @@ public class CheckoutTest {
 		}
 	}
 	
+	@Test
+	public void canScanMultipleWeightedItemsAndQuatifiedItems() {
+		try {
+			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
+			assertEquals(checkout.scanItem(weightedItemOne.getName(), 1.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 , delta);
+			assertEquals(checkout.scanItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice(), delta);
+			assertEquals(checkout.scanItem(weightedItemTwo.getName(), 2.5), quantifiedItemOne.getPrice() + weightedItemOne.getPrice() * 1.5 + quantifiedItemTwo.getPrice() + weightedItemTwo.getPrice() * 2.5, delta);
+		} catch (ItemNotFoundException | WeightedItemException | QuantifiedItemException e) {
+			fail();
+		}
+	}
+	
 	@Test 
-	public void scanTwoWithBuyOneGetOneFreeSpecial() {
+	public void canScanTwoQuantifiedItemsWithBuyOneGetOneFreeSpecial() {
 		try {
 			quantifiedItemOne.setSpecial(1, 1, 100.00);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
@@ -160,7 +176,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanThreeWithBuyTwoGetOneFreeSpecial() throws ItemNotFoundException, WeightedItemException {
+	public void canScanThreeQuantifiedItemsWithBuyTwoGetOneFreeSpecial() {
 		try {
 			quantifiedItemOne.setSpecial(2, 1, 100.00);
 			// Scan 2 items
@@ -174,7 +190,7 @@ public class CheckoutTest {
 	}
 		
 	@Test
-	public void canScanSixWithBuyTwoGetOneFreeSpecial() {
+	public void canScanSixQuantifiedItemsWithBuyTwoGetOneFreeSpecial() {
 		try {
 			quantifiedItemOne.setSpecial(2, 1, 100.00);
 			// Scan 2 items
@@ -192,7 +208,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanTwoWithBuyOneGetOneHalfOffSpecial() {
+	public void canScanTwoQuantifiedItemsWithBuyOneGetOneHalfOffSpecial() {
 		try {
 			quantifiedItemOne.setSpecial(1, 1, 50.00);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
@@ -204,7 +220,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanFourWithBuyTwoGetTwoHalfOffSpecial() {
+	public void canScanFourQuantifiedItemsWithBuyTwoGetTwoHalfOffSpecial() {
 		try {
 			// essentially the same as buy 3 get one free
 			quantifiedItemOne.setSpecial(2, 2, 50.00);
@@ -219,7 +235,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanThreeWithThreeForFiveSpecial() {
+	public void canScanThreeQuantifiedItemsWithThreeForFiveSpecial() {
 		try {
 			quantifiedItemOne.setSpecial(3, 5.00);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
@@ -231,7 +247,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanFiveWithThreeForFiveSpecial()  {
+	public void canScanFiveQuantifiedItemsWithThreeForFiveSpecial()  {
 		try {
 			quantifiedItemOne.setSpecial(3, 5.00);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
@@ -245,7 +261,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanSixWithThreeForFiveSpecial() {
+	public void canScanSixQuantifiedItemsWithThreeForFiveSpecial() {
 		try {
 			quantifiedItemOne.setSpecial(3, 5.00);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
@@ -260,7 +276,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanEightWithBuyTwoGetOneFreeSpecialLimitSix() {
+	public void canScanEightQuantifiedItemsWithBuyTwoGetOneFreeSpecialLimitSix() {
 		try {
 			quantifiedItemOne.setSpecial(2, 1, 100.00);
 			quantifiedItemOne.setSpecialLimit(6);
@@ -275,7 +291,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanNineWithThreeForFiveSpecialLimitSix() {
+	public void canScanNineQuantifiedItemsWithThreeForFiveSpecialLimitSix() {
 		try {
 			quantifiedItemOne.setSpecial(3, 5.00);
 			quantifiedItemOne.setSpecialLimit(6);
@@ -300,7 +316,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canRemoveQuantifiedItemThatHasABuy2Get1FreeSpecial() {
+	public void canRemoveAScannedQuantifiedItemThatHasABuy2Get1FreeSpecial() {
 		try {
 			quantifiedItemOne.setSpecial(2, 1, 100.00);
 			assertEquals(checkout.scanItem(quantifiedItemOne.getName()), quantifiedItemOne.getPrice(), delta);
@@ -324,7 +340,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanThreePoundsWithBuyTwoPoundsGetOnePoundFreeSpecial() {
+	public void canScanWeightedItemThreePoundsWithBuyTwoPoundsGetOnePoundFreeSpecial() {
 		weightedItemOne.setSpecial(2.0, 1.0, 100.0);
 		try {
 			assertEquals(checkout.scanItem(weightedItemOne.getName(), 3.0), weightedItemOne.getPrice() * 2.0, delta);
@@ -334,7 +350,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void canScanTwoWithBuyOneGetOneFreeSpecialAndMarkdown() {
+	public void canScanTwoQuantifiedItemsWithBuyOneGetOneFreeSpecialAndMarkdown() {
 		try {
 			double priceBeforeMarkdown = quantifiedItemOne.getPrice();
 			quantifiedItemOne.setSpecial(1, 1, 100.0);
@@ -347,7 +363,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void cantScanAQuantifiedItemThatIsNotAValidStoreItem() {
+	public void scanningAQuantifiedItemThatIsNotAValidStoreItemShouldThrowItemNotFoundException() {
 		boolean itemNotFoundExceptionCaught = false;
 		try {
 			assertEquals(checkout.scanItem(quantifiedItemNotInStore.getName()), 0.0, delta);
@@ -361,7 +377,7 @@ public class CheckoutTest {
 	}
 	
 	@Test
-	public void cantScanAWeightedItemThatIsNotAValidStoreItem() {
+	public void scanningAWeightedItemThatIsNotAValidStoreItemShouldThrowItemNotFoundException() {
 		boolean itemNotFoundExceptionCaught = false;
 		try {
 			assertEquals(checkout.scanItem(weightedItemNotInStore.getName(), 2.00), 0.0, delta);
@@ -370,48 +386,6 @@ public class CheckoutTest {
 			itemNotFoundExceptionCaught = true;
 		} finally {
 			assertTrue(itemNotFoundExceptionCaught);
-		}
-	}
-	
-	@Test
-	public void removingAQuantifiedItemThatHasNotBeenScannedShouldThrowItemNotFoundException() {
-		boolean itemNotFoundExceptionCaught = false;
-		try {
-			checkout.scanItem(quantifiedItemOne.getName());
-			assertEquals(checkout.removeItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice(), delta);
-		} catch (ItemNotFoundException | WeightedItemException e) {
-			assertTrue(e instanceof ItemNotFoundException);
-			itemNotFoundExceptionCaught = true;
-		} finally {
-			assertTrue(itemNotFoundExceptionCaught);
-		}
-	}
-	
-	@Test
-	public void removingAWeightedItemThatHasNotBeenScannedShouldThrowItemNotFoundException() {
-		boolean itemNotFoundExceptionCaught = false;
-		try {
-			checkout.scanItem(weightedItemOne.getName(), 1.5);
-			assertEquals(checkout.removeItem(weightedItemTwo.getName(), 2.0), weightedItemOne.getPrice() * 1.5, delta);
-		} catch (ItemNotFoundException | QuantifiedItemException e) {
-			assertTrue(e instanceof ItemNotFoundException);
-			itemNotFoundExceptionCaught = true;
-		} finally {
-			assertTrue(itemNotFoundExceptionCaught);
-		}
-	}
-	
-	@Test
-	@SuppressWarnings("unused")
-	public void storeCannotBeNull() {
-		boolean exceptionCaught = false;
-		try {
-			Checkout testCheckout = new Checkout(null);
-		} catch (IllegalArgumentException ex) {
-			exceptionCaught = true;
-			assertEquals(ex.getMessage(), "Store can not be null.");
-		} finally {
-			assertTrue(exceptionCaught);
 		}
 	}
 	
@@ -444,6 +418,20 @@ public class CheckoutTest {
 	}
 	
 	@Test
+	public void removingAQuantifiedItemThatHasNotBeenScannedShouldThrowItemNotFoundException() {
+		boolean itemNotFoundExceptionCaught = false;
+		try {
+			checkout.scanItem(quantifiedItemOne.getName());
+			assertEquals(checkout.removeItem(quantifiedItemTwo.getName()), quantifiedItemOne.getPrice(), delta);
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			assertTrue(e instanceof ItemNotFoundException);
+			itemNotFoundExceptionCaught = true;
+		} finally {
+			assertTrue(itemNotFoundExceptionCaught);
+		}
+	}
+	
+	@Test
 	public void removingAQuantifiedItemWhileProvidingAWeightShouldThrowQuantifiedItemException() {
 		boolean quantifiedItemExceptionCaught = false;
 		try {
@@ -455,6 +443,20 @@ public class CheckoutTest {
 		} finally {
 			assertTrue(quantifiedItemExceptionCaught);
 		}		
+	}
+	
+	@Test
+	public void removingAWeightedItemThatHasNotBeenScannedShouldThrowItemNotFoundException() {
+		boolean itemNotFoundExceptionCaught = false;
+		try {
+			checkout.scanItem(weightedItemOne.getName(), 1.5);
+			assertEquals(checkout.removeItem(weightedItemTwo.getName(), 2.0), weightedItemOne.getPrice() * 1.5, delta);
+		} catch (ItemNotFoundException | QuantifiedItemException e) {
+			assertTrue(e instanceof ItemNotFoundException);
+			itemNotFoundExceptionCaught = true;
+		} finally {
+			assertTrue(itemNotFoundExceptionCaught);
+		}
 	}
 	
 	@Test
