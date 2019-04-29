@@ -369,4 +369,18 @@ public class CheckoutTest {
 			assertTrue(exceptionCaught);
 		}
 	}
+	
+	@Test
+	public void scanningAWeightedItemWithoutProvidingWeightShouldThrowWeightedItemException() {
+		boolean weightedItemExceptionCaught = false;
+		try {
+			checkout.scanItem(weightedItemOne.getName());
+		} catch (ItemNotFoundException | WeightedItemException e) {
+			assertTrue(e instanceof WeightedItemException);
+			assertEquals(e.getMessage(), "Must provide item weight");
+			weightedItemExceptionCaught = true;
+		} finally {
+			assertTrue(weightedItemExceptionCaught);
+		}
+	}
 }
