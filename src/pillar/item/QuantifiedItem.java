@@ -1,5 +1,7 @@
 package pillar.item;
 
+import pillar.item.exception.RangeException;
+
 public class QuantifiedItem extends AbstractItem<Integer> {
 
 	private int specialTriggerQuantity; 
@@ -16,13 +18,15 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		specialQuanitityLimit = 0;
 	}
 	
-	public void setSpecial(int triggerQuantity, int discountedQuantity, double discountPercent) {
-		if(0.0 <= discountPercent && 100.00 >= discountPercent && triggerQuantity >= 0 && discountedQuantity >= 0) {
-			specialTriggerQuantity = triggerQuantity;
-			specialDiscountedQuantity = discountedQuantity;
-			specialDiscountPercent = discountPercent;
-			specialDiscountPrice = 0.0;
-		}
+	public void setSpecial(int triggerQuantity, int discountedQuantity, double discountPercent) throws RangeException {
+		if(triggerQuantity < 0) throw new RangeException("trigger quantity must be greater than or equal to 0");
+		if(discountedQuantity < 0) throw new RangeException("discounted quantity must be greater than or equal to 0");
+		if(0.0 > discountPercent || 100.00 < discountPercent) throw new RangeException("discount percent must be between greater than or equal to 0.00 and less than or equal to 100.00");
+		
+		specialTriggerQuantity = triggerQuantity;
+		specialDiscountedQuantity = discountedQuantity;
+		specialDiscountPercent = discountPercent;
+		specialDiscountPrice = 0.0;
 	}
 	
 	public void setSpecial(int triggerQuantity, double discountPrice) {
@@ -40,10 +44,11 @@ public class QuantifiedItem extends AbstractItem<Integer> {
 		}
 	}
 	
-	public void setSpecialLimit(int limit) {
-		if(limit >= 0) {
-			specialQuanitityLimit = limit;
+	public void setSpecialLimit(int limit) throws RangeException {
+		if(limit < 0) {
+			throw new RangeException("special limit must be greater than or equal to 0.");
 		}
+		specialQuanitityLimit = limit;
 	}
 	
 	public int getSpecialTriggerQuantity() {

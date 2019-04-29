@@ -2,12 +2,14 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
+import pillar.item.exception.RangeException;
 
 public class ItemTest {
 
@@ -56,10 +58,14 @@ public class ItemTest {
 	
 	@Test
 	public void addBuyNGetMAtPercentOffSpecialToQuantifiedItem() {
-		quantifiedItem.setSpecial(1, 1, 100.00);
-		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 1);
-		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 1);
-		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
+		try {
+			quantifiedItem.setSpecial(1, 1, 100.00);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 1);
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 1);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
+		} catch (RangeException e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -71,9 +77,13 @@ public class ItemTest {
 	
 	@Test
 	public void addSpecialLimit() {
-		quantifiedItem.setSpecial(2,  1, 100.00);
-		quantifiedItem.setSpecialLimit(6);
-		assertEquals(quantifiedItem.getSpecialLimit(), 6);
+		try {
+			quantifiedItem.setSpecial(2,  1, 100.00);
+			quantifiedItem.setSpecialLimit(6);
+			assertEquals(quantifiedItem.getSpecialLimit(), 6);
+		} catch (RangeException e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -85,22 +95,30 @@ public class ItemTest {
 	
 	@Test
 	public void settingSpecialNForXShouldClearBuyNGetNXPercentOff() {
-		quantifiedItem.setSpecial(2, 1, 100.00);
-		quantifiedItem.setSpecial(3, 5.00);
-		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 3);
-		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
-		assertEquals(quantifiedItem.getDiscountPrice(), 5.00, delta);
+		try {
+			quantifiedItem.setSpecial(2, 1, 100.00);
+			quantifiedItem.setSpecial(3, 5.00);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 3);
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+			assertEquals(quantifiedItem.getDiscountPrice(), 5.00, delta);
+		} catch (RangeException e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void settingBuyNGetNXPercentOffShouldClearNForX() {
-		quantifiedItem.setSpecial(3, 5.00);
-		quantifiedItem.setSpecial(2, 1, 100.00);
-		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 2);
-		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 1);
-		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
-		assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
+		try {
+			quantifiedItem.setSpecial(3, 5.00);
+			quantifiedItem.setSpecial(2, 1, 100.00);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 2);
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 1);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 100.00, delta);
+			assertEquals(quantifiedItem.getDiscountPrice(), 0.0, delta);
+		} catch (RangeException e) {
+			fail();
+		}
 	}
 	
 	@Test
@@ -113,31 +131,52 @@ public class ItemTest {
 	
 	@Test
 	public void BuyNGetMForXPercentOffMustHavePercentBetweenZeroAndHundredInclusive() {
-		quantifiedItem.setSpecial(2, 1, -0.01);
-		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		try {
+			quantifiedItem.setSpecial(2, 1, -0.01);
+		} catch (RangeException e) {
+			assertEquals(e.getMessage(), "discount percent must be between greater than or equal to 0.00 and less than or equal to 100.00");
+		} finally {
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		}
 		
-		quantifiedItem.setSpecial(2, 1, 100.01);
-		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		try {	
+			quantifiedItem.setSpecial(2, 1, 100.01);
+		} catch (RangeException e) {
+			assertEquals(e.getMessage(), "discount percent must be between greater than or equal to 0.00 and less than or equal to 100.00");
+		} finally {
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		}
 	}
 	
 	@Test
 	public void BuyNGetMForXPercentOffMustHaveTriggerQuantityGreaterThenEqualToZero() {
-		quantifiedItem.setSpecial(-1, 1, 100.0);
-		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		try {
+			quantifiedItem.setSpecial(-1, 1, 100.0);
+
+		} catch (RangeException e) {
+			assertEquals(e.getMessage(), "trigger quantity must be greater than or equal to 0");
+		} finally {
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		}
 	}
 	
 	@Test
 	public void BuyNGetMForXPercentOffMustHaveDiscountedQuantityGreaterThenEqualToZero() {
-		quantifiedItem.setSpecial(1, -1, 100.0);
-		assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
-		assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		try {
+			quantifiedItem.setSpecial(1, -1, 100.0);
+		} catch (RangeException e) {
+			assertEquals(e.getMessage(), "discounted quantity must be greater than or equal to 0");
+		} finally {
+			assertEquals(quantifiedItem.getSpecialDiscountedQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialTriggerQuantity(), 0);
+			assertEquals(quantifiedItem.getSpecialDiscountPercent(), 0.0, delta);
+		}
 	}
 	
 	@Test
@@ -167,8 +206,13 @@ public class ItemTest {
 	
 	@Test
 	public void specialLimitMustBeGreaterThanEqualZero() {
-		quantifiedItem.setSpecialLimit(-1);
-		assertEquals(quantifiedItem.getSpecialLimit(), 0);
+		try {
+			quantifiedItem.setSpecialLimit(-1);
+		} catch (RangeException e) {
+			assertEquals(e.getMessage(), "special limit must be greater than or equal to 0.");
+		} finally {
+			assertEquals(quantifiedItem.getSpecialLimit(), 0);
+		}
 	}
 	
 	
