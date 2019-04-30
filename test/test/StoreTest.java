@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import pillar.Store;
 import pillar.item.QuantifiedItem;
-import pillar.item.exception.RangeException;
+import pillar.exception.RangeException;
 
 public class StoreTest {
 

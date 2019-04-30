@@ -6,9 +6,9 @@ import java.util.Map;
 import pillar.item.AbstractItem;
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
-import pillar.item.exception.ItemNotFoundException;
-import pillar.item.exception.QuantifiedItemException;
-import pillar.item.exception.WeightedItemException;
+import pillar.exception.ItemNotFoundException;
+import pillar.exception.QuantifiedItemException;
+import pillar.exception.WeightedItemException;
 
 public class Checkout {
 

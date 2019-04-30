@@ -1,11 +1,11 @@
-package pillar.item.exception;
+package pillar.exception;
 
-public class RangeException extends Exception{
+public class QuantifiedItemException extends Exception{
 
 	private static final long serialVersionUID = 1L;
 	private String message;
 	
-	public RangeException(String message) {
+	public QuantifiedItemException(String message) {
 		this.message = message; 
 	}
 	
@@ -13,4 +13,3 @@ public class RangeException extends Exception{
 		return this.message;
 	}
 }
-

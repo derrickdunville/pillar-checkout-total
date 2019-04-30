@@ -1,4 +1,4 @@
-package pillar.item.exception;
+package pillar.exception;
 
 @SuppressWarnings("serial")
 public class ItemNotFoundException extends Exception{

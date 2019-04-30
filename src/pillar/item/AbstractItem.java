@@ -1,6 +1,6 @@
 package pillar.item;
 
-import pillar.item.exception.RangeException;
+import pillar.exception.RangeException;
 
 public abstract class AbstractItem<V> {
 	private String name;

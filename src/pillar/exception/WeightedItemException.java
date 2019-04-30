@@ -1,11 +1,11 @@
-package pillar.item.exception;
+package pillar.exception;
 
-public class InvalidSpecialException extends Exception{
-
+public class WeightedItemException extends Exception{
+	
 	private static final long serialVersionUID = 1L;
 	private String message;
 	
-	public InvalidSpecialException(String message) {
+	public WeightedItemException(String message) {
 		this.message = message; 
 	}
 	

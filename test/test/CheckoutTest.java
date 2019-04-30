@@ -11,11 +11,11 @@ import pillar.Checkout;
 import pillar.Store;
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
-import pillar.item.exception.InvalidSpecialException;
-import pillar.item.exception.ItemNotFoundException;
-import pillar.item.exception.QuantifiedItemException;
-import pillar.item.exception.RangeException;
-import pillar.item.exception.WeightedItemException;
+import pillar.exception.InvalidSpecialException;
+import pillar.exception.ItemNotFoundException;
+import pillar.exception.QuantifiedItemException;
+import pillar.exception.RangeException;
+import pillar.exception.WeightedItemException;
 
 public class CheckoutTest {
 

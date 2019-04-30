@@ -1,7 +1,7 @@
 package pillar.item;
 
-import pillar.item.exception.InvalidSpecialException;
-import pillar.item.exception.RangeException;
+import pillar.exception.InvalidSpecialException;
+import pillar.exception.RangeException;
 
 public class QuantifiedItem extends AbstractItem<Integer> {
 

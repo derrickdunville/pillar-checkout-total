@@ -9,8 +9,8 @@ import org.junit.Test;
 
 import pillar.item.QuantifiedItem;
 import pillar.item.WeightedItem;
-import pillar.item.exception.InvalidSpecialException;
-import pillar.item.exception.RangeException;
+import pillar.exception.InvalidSpecialException;
+import pillar.exception.RangeException;
 
 public class ItemTest {
 
