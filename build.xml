@@ -1,0 +1,29 @@
+<?xml version = "1.0"?>
+<project name = "Pillar Checkout Order Total Kata" default = "info">
+	<path id="classpath">
+		<pathelement location="lib/junit-4.13-beta-2.jar"/>
+		<pathelement location="lib/hamcrest-core-1.3.jar"/>
+		<pathelement location="bin"/>
+	</path>
+	<target name = "info">
+		<echo>Pillar Checkout Order Total Kata - Welcome to Apache Ant!</echo>
+	</target>
+	<target name="compile">
+		<delete dir="bin"/>
+		<mkdir dir="bin"/>
+		<javac srcdir="src" destdir="bin" includeantruntime="false"/>
+		<javac srcdir="test" destdir="bin" includeantruntime="false">
+			<classpath refid="classpath"/>
+		</javac>
+	</target>
+	<target name="test">
+		<java classname="test.Test">
+			<classpath refid="classpath"/>
+		</java>
+	</target>
+	<target name="run">
+		<java classname="pillar.Main">
+			<classpath refid="classpath"/>
+		</java>
+	</target>
+</project>
