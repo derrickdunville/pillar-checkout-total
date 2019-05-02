@@ -6,9 +6,9 @@
 		<pathelement location="bin"/>
 	</path>
 	<target name = "info">
-		<echo>Pillar Checkout Order Total Kata - Welcome to Apache Ant!</echo>
+		<echo>Pillar Checkout Order Total Kata</echo>
 	</target>
-	<target name="compile">
+	<target name="build">
 		<delete dir="bin"/>
 		<mkdir dir="bin"/>
 		<javac srcdir="src" destdir="bin" includeantruntime="false"/>
@@ -16,12 +16,12 @@
 			<classpath refid="classpath"/>
 		</javac>
 	</target>
-	<target name="test">
+	<target name="test" depends="build">
 		<java classname="test.Test">
 			<classpath refid="classpath"/>
 		</java>
 	</target>
-	<target name="run">
+	<target name="run" depends="build">
 		<java classname="pillar.Main">
 			<classpath refid="classpath"/>
 		</java>
