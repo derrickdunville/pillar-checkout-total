@@ -49,7 +49,6 @@ public class CheckoutTest {
 		}
 	}
 	
-	
 	@Test
 	@SuppressWarnings("unused")
 	public void storeCannotBeNull() {

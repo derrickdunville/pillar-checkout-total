@@ -105,6 +105,6 @@ public class Checkout {
 				total += ((WeightedItem) currentItem).getSubTotal((Double) entry.getValue());
 			}
 		}
-		return total;
+		return Math.round(total * 100.0)/100.0;
 	}
 }
