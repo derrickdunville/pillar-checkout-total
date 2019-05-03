@@ -8,7 +8,7 @@ This project is the solution for an interview coding challenge for Pillar Techno
 
 ## Environment
 
-This program was build using Java 8 SE and also utilizes Ant, their versions are listed below. 
+This program was built using Java 8 SE and also utilizes Ant, their versions are listed below. 
 
 `jdk1.8.0_211`
 
